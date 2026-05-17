@@ -15,7 +15,7 @@ const TESTIMONIALS = [
 
 const FAQ = [
   { q: "Bài test này có mất phí không?", a: "<strong>Hoàn toàn miễn phí 100%.</strong> Không cần thẻ tín dụng, không cần tài khoản. Bạn chỉ cần làm bài test và nhận kết quả ngay lập tức — không có bước nào yêu cầu thanh toán.", open: true },
-  { q: "Bài test mất bao lâu?", a: "<strong>Khoảng 3–5 phút.</strong> Chỉ có 13 câu hỏi ngắn, lựa chọn nhanh. Bạn không cần chuẩn bị hay tra cứu gì — chỉ cần trả lời theo cảm nhận thực tế của mình." },
+  { q: "Bài test mất bao lâu?", a: "<strong>Khoảng 3–5 phút.</strong> Chỉ có 15 câu hỏi ngắn, lựa chọn nhanh. Bạn không cần chuẩn bị hay tra cứu gì — chỉ cần trả lời theo cảm nhận thực tế của mình." },
   { q: "Kết quả có chính xác không?", a: "Kết quả chính xác đến mức bạn trả lời thành thật. Bài test được thiết kế dựa trên <strong>các mẫu chi tiêu phổ biến</strong> của người Việt và tâm lý học hành vi tài chính. Trả lời càng thật → insight càng có giá trị." },
   { q: "Tôi có cần nhập thông tin cá nhân không?", a: "Không cần nhập tên hay số điện thoại để làm bài test. Nếu bạn muốn nhận kết quả chi tiết qua email, bạn có thể nhập — nhưng <strong>hoàn toàn tự nguyện</strong>. Chúng tôi không spam." },
   { q: "Sau khi làm xong tôi sẽ nhận được gì?", a: "Bạn sẽ nhận ngay: <strong>(1)</strong> Điểm \"rò rỉ tài chính\" trên thang 0–100, <strong>(2)</strong> Top 2–3 lỗ hổng lớn nhất theo thứ tự ưu tiên, <strong>(3)</strong> Plan hành động 3 bước cụ thể để bắt đầu khóa rò rỉ từ tuần này." },
@@ -39,6 +39,15 @@ const QUESTIONS = [
       { label: "1–2 cái", scores: { subscription: 3 } },
       { label: "3–5 cái", scores: { subscription: 5 } },
       { label: "Hơn 5 cái", scores: { subscription: 8 } },
+    ],
+  },
+  {
+    text: "Khi đăng ký free trial (Netflix, Spotify, app...), bạn có nhớ huỷ trước khi bắt đầu tính phí không?",
+    options: [
+      { label: "Luôn nhớ huỷ đúng lúc", scores: {} },
+      { label: "Đa số nhớ huỷ", scores: { subscription: 2 } },
+      { label: "Thỉnh thoảng quên", scores: { subscription: 5 } },
+      { label: "Hầu như luôn quên — và bị trừ tiền tự động", scores: { subscription: 8 } },
     ],
   },
   {
@@ -93,6 +102,15 @@ const QUESTIONS = [
       { label: "Đôi khi", scores: { social: 3 } },
       { label: "Thường xuyên", scores: { social: 6 } },
       { label: "Rất áp lực, chi quá khả năng", scores: { social: 9 } },
+    ],
+  },
+  {
+    text: "Khi bạn bè khoe du lịch / hàng hiệu / quán sang trên mạng xã hội, bạn có cảm thấy áp lực phải chi tương tự không?",
+    options: [
+      { label: "Không bao giờ", scores: {} },
+      { label: "Đôi khi", scores: { social: 3 } },
+      { label: "Khá thường xuyên", scores: { social: 6 } },
+      { label: "Rất thường, và đã từng chi vượt khả năng", scores: { social: 9 } },
     ],
   },
   {
@@ -268,7 +286,7 @@ function selectAnswer(index) {
 }
 
 function showResults() {
-  const maxPossible = 114;
+  const maxPossible = 131;
   const totalRaw = Object.values(leakScores).reduce((a, b) => a + b, 0);
   const score = Math.min(100, Math.round((totalRaw / maxPossible) * 100));
   const level = getLevel(score);

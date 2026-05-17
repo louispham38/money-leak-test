@@ -1,11 +1,11 @@
 # MoneyLeakTest — Bài Test Rò Rỉ Tài Chính
 
-Landing page tiếng Việt + bài test 13 câu giúp người dùng phát hiện chính xác lỗ hổng đang "rò rỉ" tiền mỗi tháng — và nhận plan hành động cụ thể để khóa lại.
+Landing page tiếng Việt + bài test 15 câu giúp người dùng phát hiện chính xác lỗ hổng đang "rò rỉ" tiền mỗi tháng — và nhận plan hành động cụ thể để khóa lại.
 
 ## Tính năng
 
 - **Landing page** responsive, giao diện sáng/chuyên nghiệp với gradient xanh dương–xanh ngọc.
-- **Bài test 13 câu** chấm điểm 0–100 ở 6 nhóm lỗ hổng: subscription, mua sắm cảm xúc, lãi vay, chi tiêu hàng ngày, đầu tư, xã giao.
+- **Bài test 15 câu** chấm điểm 0–100 ở 6 nhóm lỗ hổng: subscription, mua sắm cảm xúc, lãi vay, chi tiêu hàng ngày, đầu tư, xã giao.
 - **Kết quả cá nhân hóa**: điểm tổng, top lỗ hổng, plan hành động 3 bước.
 - **Tích hợp Zalo**: nút và QR code dẫn về nhóm cộng đồng "Thịnh Vượng - Hạnh Phúc".
 
