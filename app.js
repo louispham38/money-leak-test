@@ -15,25 +15,131 @@ const TESTIMONIALS = [
 
 const FAQ = [
   { q: "Bài test này có mất phí không?", a: "<strong>Hoàn toàn miễn phí 100%.</strong> Không cần thẻ tín dụng, không cần tài khoản. Bạn chỉ cần làm bài test và nhận kết quả ngay lập tức — không có bước nào yêu cầu thanh toán.", open: true },
-  { q: "Bài test mất bao lâu?", a: "<strong>Khoảng 3–5 phút.</strong> Chỉ có 12 câu hỏi ngắn, lựa chọn nhanh. Bạn không cần chuẩn bị hay tra cứu gì — chỉ cần trả lời theo cảm nhận thực tế của mình." },
+  { q: "Bài test mất bao lâu?", a: "<strong>Khoảng 3–5 phút.</strong> Chỉ có 13 câu hỏi ngắn, lựa chọn nhanh. Bạn không cần chuẩn bị hay tra cứu gì — chỉ cần trả lời theo cảm nhận thực tế của mình." },
   { q: "Kết quả có chính xác không?", a: "Kết quả chính xác đến mức bạn trả lời thành thật. Bài test được thiết kế dựa trên <strong>các mẫu chi tiêu phổ biến</strong> của người Việt và tâm lý học hành vi tài chính. Trả lời càng thật → insight càng có giá trị." },
   { q: "Tôi có cần nhập thông tin cá nhân không?", a: "Không cần nhập tên hay số điện thoại để làm bài test. Nếu bạn muốn nhận kết quả chi tiết qua email, bạn có thể nhập — nhưng <strong>hoàn toàn tự nguyện</strong>. Chúng tôi không spam." },
   { q: "Sau khi làm xong tôi sẽ nhận được gì?", a: "Bạn sẽ nhận ngay: <strong>(1)</strong> Điểm \"rò rỉ tài chính\" trên thang 0–100, <strong>(2)</strong> Top 2–3 lỗ hổng lớn nhất theo thứ tự ưu tiên, <strong>(3)</strong> Plan hành động 3 bước cụ thể để bắt đầu khóa rò rỉ từ tuần này." },
 ];
 
 const QUESTIONS = [
-  { text: "Cuối tháng, bạn thường không biết tiền đã tiêu vào đâu?", options: [{ label: "Hiếm khi / Không", scores: {} }, { label: "Thỉnh thoảng", scores: { daily: 2 } }, { label: "Thường xuyên", scores: { daily: 4 } }, { label: "Gần như mỗi tháng", scores: { daily: 6 } }] },
-  { text: "Bạn có bao nhiêu subscription (app, gym, streaming...) đang trả nhưng ít dùng?", options: [{ label: "Không có", scores: {} }, { label: "1–2 cái", scores: { subscription: 3 } }, { label: "3–5 cái", scores: { subscription: 5 } }, { label: "Hơn 5 cái", scores: { subscription: 8 } }] },
-  { text: "Khi thấy flash sale hoặc TikTok Shop, bạn thường...", options: [{ label: "Bỏ qua", scores: {} }, { label: "Xem nhưng hiếm mua", scores: { shopping: 2 } }, { label: "Mua nếu thích", scores: { shopping: 5 } }, { label: "Mua ngay, suy nghĩ sau", scores: { shopping: 8 } }] },
-  { text: "Thẻ tín dụng của bạn — bạn thường trả...", options: [{ label: "Không dùng thẻ TD", scores: {} }, { label: "Trả full mỗi tháng", scores: {} }, { label: "Trả một phần", scores: { debt: 5 } }, { label: "Chỉ trả tối thiểu", scores: { debt: 9 } }] },
-  { text: "Chi phí trà sữa, grab, cà phê, ăn ngoài của bạn mỗi tháng khoảng...", options: [{ label: "Dưới 500K", scores: {} }, { label: "500K – 1.5tr", scores: { daily: 3 } }, { label: "1.5tr – 3tr", scores: { daily: 5 } }, { label: "Trên 3tr", scores: { daily: 8 } }] },
-  { text: "Bạn có đang đầu tư vào thứ mình không hiểu rõ không?", options: [{ label: "Không", scores: {} }, { label: "Có, nhưng số tiền nhỏ", scores: { investment: 3 } }, { label: "Có, đáng kể", scores: { investment: 6 } }, { label: "Có, và đã thua lỗ", scores: { investment: 9 } }] },
-  { text: "Áp lực chi tiêu vì đám cưới, nhậu, quà tặng, du lịch nhóm...", options: [{ label: "Không ảnh hưởng", scores: {} }, { label: "Đôi khi", scores: { social: 3 } }, { label: "Thường xuyên", scores: { social: 6 } }, { label: "Rất áp lực, chi quá khả năng", scores: { social: 9 } }] },
-  { text: "Bạn có ngân sách chi tiêu hàng tháng không?", options: [{ label: "Có, và tuân thủ tốt", scores: {} }, { label: "Có, nhưng hay vượt", scores: { daily: 2, shopping: 2 } }, { label: "Có nhưng không theo dõi", scores: { daily: 4 } }, { label: "Không có", scores: { daily: 5, shopping: 3 } }] },
-  { text: "Khi buồn/stress, bạn có mua sắm để \"xả\" không?", options: [{ label: "Không bao giờ", scores: {} }, { label: "Hiếm khi", scores: { shopping: 2 } }, { label: "Thỉnh thoảng", scores: { shopping: 5 } }, { label: "Thường xuyên", scores: { shopping: 8 } }] },
-  { text: "Bạn biết chính xác tổng lãi vay/thẻ TD đang trả mỗi tháng không?", options: [{ label: "Biết rõ", scores: {} }, { label: "Biết ước lượng", scores: { debt: 2 } }, { label: "Không chắc", scores: { debt: 5 } }, { label: "Không biết", scores: { debt: 8 } }] },
-  { text: "So với thu nhập, mức tiết kiệm của bạn...", options: [{ label: "Ổn định, có kế hoạch", scores: {} }, { label: "Tiết kiệm được nhưng ít", scores: { daily: 2 } }, { label: "Gần như không tiết kiệm", scores: { daily: 4, shopping: 2 } }, { label: "Thường thâm hụt cuối tháng", scores: { daily: 5, debt: 3, shopping: 2 } }] },
-  { text: "Nếu mất 5 triệu không rõ lý do, bạn sẽ...", options: [{ label: "Biết ngay đi đâu", scores: {} }, { label: "Tìm ra trong vài ngày", scores: { daily: 2 } }, { label: "Khó xác định", scores: { daily: 5, subscription: 2 } }, { label: "Chẳng biết luôn", scores: { daily: 6, subscription: 3, shopping: 2 } }] },
+  {
+    text: "Mỗi cuối tháng, bạn có biết tiền đã tiêu vào đâu không?",
+    options: [
+      { label: "Hoàn toàn không biết", scores: { daily: 9 } },
+      { label: "Hiếm khi biết", scores: { daily: 2 } },
+      { label: "Biết một chút", scores: { daily: 4 } },
+      { label: "Hầu như biết", scores: { daily: 6 } },
+      { label: "Biết rất rõ từng thứ", scores: {} },
+    ],
+  },
+  {
+    text: "Bạn có bao nhiêu dịch vụ online/offline (app, gym, streaming...) đang trả nhưng ít dùng?",
+    options: [
+      { label: "Không có", scores: {} },
+      { label: "1–2 cái", scores: { subscription: 3 } },
+      { label: "3–5 cái", scores: { subscription: 5 } },
+      { label: "Hơn 5 cái", scores: { subscription: 8 } },
+    ],
+  },
+  {
+    text: "Bạn phản ứng như thế nào với các chương trình Flash sale / Khuyến mãi trên internet?",
+    options: [
+      { label: "Bỏ qua", scores: {} },
+      { label: "Xem nhưng ít mua", scores: { shopping: 2 } },
+      { label: "Mua nếu thích", scores: { shopping: 5 } },
+      { label: "Mua ngay, không suy nghĩ nhiều", scores: { shopping: 8 } },
+    ],
+  },
+  {
+    text: "Bạn có sử dụng thẻ tín dụng không?",
+    options: [
+      { label: "Không dùng thẻ TD", scores: {} },
+      { label: "Trả full mỗi tháng", scores: {} },
+      { label: "Trả một phần", scores: { debt: 5 } },
+      { label: "Chỉ trả tối thiểu", scores: { debt: 9 } },
+    ],
+  },
+  {
+    text: "Chi phí tiêu vặt của bạn: trà sữa, cà phê, ăn ngoài... mỗi tháng bao nhiêu?",
+    options: [
+      { label: "Dưới 500K", scores: {} },
+      { label: "500K – 1.5tr", scores: { daily: 3 } },
+      { label: "1.5tr – 3tr", scores: { daily: 5 } },
+      { label: "Trên 3tr", scores: { daily: 8 } },
+    ],
+  },
+  {
+    text: "Bạn có đang đầu tư tài chính như BĐS, Crypto, chứng khoán... không?",
+    options: [
+      { label: "Không", scores: {} },
+      { label: "Có, nhưng số tiền nhỏ", scores: { investment: 3 } },
+      { label: "Có, đáng kể", scores: { investment: 6 } },
+      { label: "Có, và đã thua lỗ", scores: { investment: 9 } },
+    ],
+  },
+  {
+    text: "Bạn có đang hiểu rõ những khoản đầu tư của bạn không?",
+    options: [
+      { label: "Không", scores: { investment: 9 } },
+      { label: "Chỉ nghe theo bạn bè, không tìm hiểu nhiều", scores: { investment: 6 } },
+      { label: "Có đầu tư học tập tìm hiểu", scores: { investment: 3 } },
+      { label: "Có nhiều kinh nghiệm và kiến thức", scores: {} },
+    ],
+  },
+  {
+    text: "Áp lực chi tiêu vì đám cưới, nhậu, quà tặng, du lịch nhóm...",
+    options: [
+      { label: "Không ảnh hưởng", scores: {} },
+      { label: "Đôi khi", scores: { social: 3 } },
+      { label: "Thường xuyên", scores: { social: 6 } },
+      { label: "Rất áp lực, chi quá khả năng", scores: { social: 9 } },
+    ],
+  },
+  {
+    text: "Bạn có ngân sách chi tiêu hàng tháng không?",
+    options: [
+      { label: "Có, và tuân thủ tốt", scores: {} },
+      { label: "Có, nhưng hay vượt", scores: { daily: 2, shopping: 2 } },
+      { label: "Có nhưng không theo dõi", scores: { daily: 4 } },
+      { label: "Không có", scores: { daily: 5, shopping: 3 } },
+    ],
+  },
+  {
+    text: "Khi buồn/stress, bạn có mua sắm để \"xả\" không?",
+    options: [
+      { label: "Không bao giờ", scores: {} },
+      { label: "Hiếm khi", scores: { shopping: 2 } },
+      { label: "Thỉnh thoảng", scores: { shopping: 5 } },
+      { label: "Thường xuyên", scores: { shopping: 8 } },
+    ],
+  },
+  {
+    text: "Bạn biết chính xác tổng lãi vay / thẻ TD đang trả mỗi tháng không?",
+    options: [
+      { label: "Biết rõ", scores: {} },
+      { label: "Biết ước lượng", scores: { debt: 2 } },
+      { label: "Không chắc", scores: { debt: 5 } },
+      { label: "Không biết", scores: { debt: 8 } },
+    ],
+  },
+  {
+    text: "So với thu nhập, mức tiết kiệm của bạn...",
+    options: [
+      { label: "Ổn định, có kế hoạch", scores: {} },
+      { label: "Tiết kiệm được nhưng ít", scores: { daily: 2 } },
+      { label: "Gần như không tiết kiệm", scores: { daily: 4, shopping: 2 } },
+      { label: "Thường thâm hụt cuối tháng", scores: { daily: 5, debt: 3, shopping: 2 } },
+    ],
+  },
+  {
+    text: "Nếu mất 5 triệu không rõ lý do, bạn sẽ...",
+    options: [
+      { label: "Biết ngay đi đâu", scores: {} },
+      { label: "Tìm ra trong vài ngày", scores: { daily: 2 } },
+      { label: "Khó xác định", scores: { daily: 5, subscription: 2 } },
+      { label: "Chẳng biết luôn", scores: { daily: 6, subscription: 3, shopping: 2 } },
+    ],
+  },
 ];
 
 const LEAK_LABELS = {
@@ -162,7 +268,7 @@ function selectAnswer(index) {
 }
 
 function showResults() {
-  const maxPossible = 72;
+  const maxPossible = 114;
   const totalRaw = Object.values(leakScores).reduce((a, b) => a + b, 0);
   const score = Math.min(100, Math.round((totalRaw / maxPossible) * 100));
   const level = getLevel(score);
