@@ -26,9 +26,9 @@ const QUESTIONS = [
     text: "Mỗi cuối tháng, bạn có biết tiền đã tiêu vào đâu không?",
     options: [
       { label: "Hoàn toàn không biết", scores: { daily: 9 } },
-      { label: "Hiếm khi biết", scores: { daily: 2 } },
+      { label: "Hiếm khi biết", scores: { daily: 6 } },
       { label: "Biết một chút", scores: { daily: 4 } },
-      { label: "Hầu như biết", scores: { daily: 6 } },
+      { label: "Hầu như biết", scores: { daily: 2 } },
       { label: "Biết rất rõ từng thứ", scores: {} },
     ],
   },
