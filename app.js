@@ -169,13 +169,149 @@ const LEAK_LABELS = {
   social: "Chi phí xã giao",
 };
 
+const PLAN_TITLES = {
+  low: "Bí quyết duy trì phong độ",
+  medium: "Plan cải thiện trong tháng tới",
+  high: "Plan hành động khẩn cấp",
+  veryHigh: "Plan cứu nguy tài chính — cần làm NGAY",
+};
+
+const PLAN_INTROS = {
+  low: "Bạn đang quản lý tài chính khá tốt. Vài gợi ý dưới đây giúp bạn giữ vững và tối ưu thêm:",
+  medium: "Bạn có vài lỗ hổng đang rò tiền. Làm theo 3 bước dưới đây trong tháng tới để cải thiện:",
+  high: "Tình hình đáng lo — tiền đang rò ra với tốc độ cao. 3 bước dưới đây cần thực hiện trong tuần này:",
+  veryHigh: "BÁO ĐỘNG ĐỎ — tài chính của bạn đang ở mức nguy hiểm. Thực hiện 3 bước dưới đây NGAY HÔM NAY:",
+};
+
 const PLANS = {
-  subscription: ["Liệt kê tất cả subscription đang trả — huỷ ngay những cái không dùng trong 30 ngày qua.", "Đặt nhắc lịch review subscription mỗi quý.", "Chuyển sang gói free hoặc chia sẻ family plan nếu cần."],
-  shopping: ["Áp dụng rule 24h: mọi mua online trên 200K phải chờ 24h.", "Xoá app Shopee/TikTok Shop khỏi màn hình chính điện thoại.", "Đặt ngân sách \"mua vui\" cố định 500K/tháng — hết là dừng."],
-  debt: ["Liệt kê tất cả khoản nợ + lãi suất — ưu tiên trả khoản lãi cao nhất trước.", "Ngừng trả tối thiểu — trả nhiều hơn mức tối thiểu ít nhất 20%.", "Cân nhắc chuyển nợ sang khoản lãi thấp hơn nếu có."],
-  daily: ["Track chi tiêu hàng ngày 7 ngày — chỉ ghi, chưa cần cắt.", "Đặt giới hạn grab/ăn ngoài: tối đa 3 lần/tuần.", "Nấu ăn batch cuối tuần — tiết kiệm 30–50% chi phí ăn uống."],
-  investment: ["Dừng đầu tư vào thứ không hiểu — học trước, bỏ tiền sau.", "Chỉ đầu tư số tiền chấp nhận mất 100%.", "Tập trung quỹ khẩn cấp 3–6 tháng trước khi đầu tư rủi ro."],
-  social: ["Đặt ngân sách \"xã giao\" cố định mỗi tháng.", "Học nói \"không\" lịch sự với lời mời vượt khả năng.", "Đề xuất gặp mặt ít tốn kém hơn thay vì từ chối hoàn toàn."],
+  low: {
+    daily: [
+      "Tiếp tục track chi tiêu 1 lần/tuần — không cần app phức tạp, sổ tay/Excel là đủ.",
+      "Thử thách 1 tháng \"không cà phê mua ngoài\" để kiểm tra mức độ kỷ luật của mình.",
+      "Tự thưởng nhỏ (≤200K) khi đạt mục tiêu tiết kiệm tuần — tạo động lực dài hạn.",
+    ],
+    subscription: [
+      "Review tất cả subscription mỗi quý — huỷ cái không dùng tới.",
+      "Bật thông báo trước khi auto-renew để không bị trừ tiền bất ngờ.",
+      "Cân nhắc share family plan với người thân để tiết kiệm 30–50%.",
+    ],
+    shopping: [
+      "Giữ thói quen \"suy nghĩ trước khi mua\" — bạn đang làm tốt.",
+      "Mỗi tháng review lại danh sách đã mua — đánh giá cái nào thực sự dùng.",
+      "Đặt ngân sách \"mua vui\" cố định để giữ kỷ luật lâu dài.",
+    ],
+    debt: [
+      "Tiếp tục trả full thẻ tín dụng đúng hạn — KHÔNG bao giờ để qua tháng.",
+      "Đặt auto-pay full balance để không bao giờ bị lỡ.",
+      "Theo dõi credit score 6 tháng/lần — duy trì điểm tốt.",
+    ],
+    investment: [
+      "Tiếp tục học và đầu tư có kế hoạch — bạn đang đi đúng hướng.",
+      "Diversify danh mục: không bỏ trứng vào 1 giỏ.",
+      "Review danh mục mỗi quý — rebalance nếu cần.",
+    ],
+    social: [
+      "Tiếp tục giữ ranh giới chi tiêu cá nhân — đừng để áp lực xã hội phá vỡ.",
+      "Lập ngân sách \"xã giao\" mỗi tháng để biết mình có gì để chi.",
+      "Tạo nhóm bạn cùng triết lý tài chính — củng cố thói quen tốt.",
+    ],
+  },
+  medium: {
+    daily: [
+      "Track chi tiêu hàng ngày 30 ngày — phân loại 3 nhóm: thiết yếu / linh hoạt / lãng phí.",
+      "Cắt 20% nhóm \"lãng phí\" — thường là trà sữa, ăn ngoài cuối tuần.",
+      "Setup auto-save 10% lương ngay khi vừa nhận — \"trả cho mình trước\".",
+    ],
+    subscription: [
+      "Liệt kê tất cả subscription đang trả — huỷ ngay cái không dùng trong 30 ngày qua.",
+      "Đặt nhắc lịch review subscription mỗi quý.",
+      "Chuyển sang gói free / family plan / downgrade gói rẻ hơn nếu được.",
+    ],
+    shopping: [
+      "Áp dụng rule 24h: mọi mua online > 200K phải chờ 24h mới quyết định.",
+      "Tạo \"wishlist\" — viết ra muốn mua, đợi 1 tuần, nếu vẫn muốn thì mua.",
+      "Đặt ngân sách \"mua vui\" cố định 500K/tháng — hết là dừng.",
+    ],
+    debt: [
+      "Liệt kê tất cả khoản nợ — biết chính xác lãi suất và số dư từng cái.",
+      "Ưu tiên trả khoản lãi cao nhất trước (avalanche method).",
+      "Trả nhiều hơn mức tối thiểu ít nhất 20% mỗi tháng.",
+    ],
+    investment: [
+      "Đọc 1 sách cơ bản về đầu tư trong 30 ngày (\"Cha giàu cha nghèo\", \"Intelligent Investor\"...).",
+      "Chỉ đầu tư số tiền dư sau khi đã có quỹ khẩn cấp 3 tháng chi phí.",
+      "Bắt đầu từ index fund / ETF — đơn giản và rủi ro thấp.",
+    ],
+    social: [
+      "Đặt ngân sách \"xã giao\" cố định (10–15% thu nhập) — không vượt quá.",
+      "Học nói \"không\" lịch sự với lời mời vượt khả năng.",
+      "Đề xuất hoạt động ít tốn kém: cà phê thay nhậu, BBQ nhà thay nhà hàng.",
+    ],
+  },
+  high: {
+    daily: [
+      "Track CHI TIẾT 7 ngày liền — biết chính xác mỗi 100K đi đâu mỗi ngày.",
+      "Đặt giới hạn cứng: grab/ăn ngoài tối đa 3 lần/tuần, trà sữa tối đa 2 ly/tuần.",
+      "Nấu ăn batch cuối tuần — tiết kiệm 30–50% chi phí ăn uống.",
+    ],
+    subscription: [
+      "Audit toàn bộ: mở bank statement 3 tháng gần nhất, tìm MỌI giao dịch định kỳ.",
+      "Huỷ hết những gì không dùng > 2 lần/tuần — không tiếc.",
+      "Chuyển sang gói free hoặc downgrade — đa số dịch vụ có gói rẻ hơn 50–70%.",
+    ],
+    shopping: [
+      "Xoá app Shopee / TikTok Shop khỏi màn hình chính (hoặc xoá hẳn 30 ngày).",
+      "Unfollow tài khoản KOL / livestream khiến bạn muốn mua liên tục.",
+      "Rule 72h cho mọi món > 500K — nếu sau 72h vẫn muốn thì mới mua.",
+    ],
+    debt: [
+      "STOP dùng thẻ tín dụng ngay — chuyển sang chỉ dùng tiền mặt / debit trong 30 ngày.",
+      "Lập kế hoạch trả hết nợ trong 6–12 tháng — chia ra mỗi tháng phải trả X đồng.",
+      "Cân nhắc chuyển nợ sang khoản lãi thấp hơn (vay ngân hàng, mượn người thân).",
+    ],
+    investment: [
+      "NGỪNG đầu tư vào thứ không hiểu — không \"theo trend\" của bạn bè.",
+      "Rút bớt khỏi tài sản rủi ro cao — để lại tối đa 20% tài sản cho đầu cơ.",
+      "Học 3 tháng trước khi bỏ thêm tiền — Coursera, Udemy, sách miễn phí thư viện.",
+    ],
+    social: [
+      "Giảm tần suất tụ tập tốn kém — từ chối 30% lời mời, ưu tiên gặp ít người thân thiết.",
+      "Unfollow / tắt thông báo tài khoản gây cảm giác \"phải so kè\".",
+      "Lập danh sách quà cố định cho cả năm — không mua quà bột phát.",
+    ],
+  },
+  veryHigh: {
+    daily: [
+      "Cài app track chi tiêu (Money Lover, Misa, Sổ Thu Chi MISA...) — track TỪNG GIAO DỊCH trong 30 ngày tới.",
+      "Cắt cứng: KHÔNG ăn ngoài 21/30 ngày, KHÔNG grab nếu < 3km — đi bộ/xe đạp.",
+      "Lập ngân sách zero-based: mỗi đồng thu vào phải có \"việc\" được giao trước khi tiêu.",
+    ],
+    subscription: [
+      "HUỶ HẾT subscription trừ 1–2 cái thực sự cần (internet, điện thoại).",
+      "Đợi 30 ngày — chỉ đăng ký lại nếu thực sự nhớ và cần dùng.",
+      "KHÔNG đăng ký free trial nếu không lưu nhắc nhở huỷ ngay sau đó.",
+    ],
+    shopping: [
+      "THỬ THÁCH 30 NGÀY KHÔNG MUA — chỉ chi cho thiết yếu (ăn, đi lại, hoá đơn).",
+      "Xoá thẻ tín dụng / ví điện tử khỏi mọi app shopping — nhập thủ công nếu cần mua.",
+      "Tìm hobby thay thế: thể thao, đọc sách, gặp bạn — để \"xả\" mà không tiêu tiền.",
+    ],
+    debt: [
+      "KHẨN CẤP: ngừng vay mới, ngừng dùng thẻ tín dụng NGAY LẬP TỨC.",
+      "Liên hệ ngân hàng xin restructure — kéo dài kỳ hạn hoặc đàm phán giảm lãi.",
+      "Áp dụng \"snowball\": dồn toàn bộ thu nhập dư vào khoản nợ NHỎ NHẤT trước để tạo momentum.",
+    ],
+    investment: [
+      "CẮT LỖ ngay những khoản đã mất — đừng \"gồng\" hi vọng lấy lại.",
+      "Đưa toàn bộ vốn còn lại vào tài sản an toàn (gửi tiết kiệm) ít nhất 6 tháng.",
+      "KHÔNG đầu tư lại cho đến khi đọc xong 3 sách về đầu tư và có quỹ khẩn cấp 6 tháng.",
+    ],
+    social: [
+      "KHẨN CẤP: tạm dừng mọi chi xã giao không bắt buộc 3 tháng — chỉ chi cho người thân trực hệ.",
+      "Nói thẳng với bạn bè thân: \"mình đang quản lại tài chính, giai đoạn này hạn chế tụ tập\".",
+      "Tìm cộng đồng cùng mục tiêu tài chính — bao quanh bằng người tiết kiệm thay vì người chi tiêu nhiều.",
+    ],
+  },
 };
 
 let currentQuestion = 0;
@@ -219,10 +355,10 @@ function renderStatic() {
 }
 
 function getLevel(score) {
-  if (score <= 25) return { label: "Thấp", color: "var(--accent)" };
-  if (score <= 50) return { label: "Trung bình", color: "var(--accent)" };
-  if (score <= 75) return { label: "Cao", color: "var(--warning)" };
-  return { label: "Rất cao", color: "var(--danger)" };
+  if (score <= 25) return { key: "low", label: "Thấp", color: "var(--accent)" };
+  if (score <= 50) return { key: "medium", label: "Trung bình", color: "var(--accent)" };
+  if (score <= 75) return { key: "high", label: "Cao", color: "var(--warm)" };
+  return { key: "veryHigh", label: "Rất cao", color: "var(--danger)" };
 }
 
 function openModal() {
@@ -315,7 +451,11 @@ function showResults() {
     .join("");
 
   const topKey = sorted[0][0];
-  const plan = PLANS[topKey] || PLANS.daily;
+  const planSet = PLANS[level.key] || PLANS.medium;
+  const plan = planSet[topKey] || planSet.daily;
+  document.querySelector(".result-plan").setAttribute("data-level", level.key);
+  document.getElementById("plan-title").textContent = PLAN_TITLES[level.key];
+  document.getElementById("plan-intro").textContent = PLAN_INTROS[level.key];
   document.getElementById("result-plan").innerHTML = plan
     .map((step) => `<li>${step}</li>`)
     .join("");

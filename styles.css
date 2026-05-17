@@ -1075,9 +1075,30 @@ body {
 .result-leaks, .result-plan { margin-bottom: 24px; }
 
 .result-leaks h3, .result-plan h3 {
-  font-size: 1rem;
-  margin-bottom: 14px;
+  font-size: 1.05rem;
+  margin-bottom: 12px;
   color: var(--text);
+}
+
+.plan-intro {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  margin-bottom: 14px;
+  padding: 12px 14px;
+  background: var(--bg-soft);
+  border-left: 3px solid var(--primary);
+  border-radius: 6px;
+  line-height: 1.55;
+}
+
+.result-plan[data-level="low"] .plan-intro { border-left-color: var(--accent); }
+.result-plan[data-level="medium"] .plan-intro { border-left-color: var(--primary); }
+.result-plan[data-level="high"] .plan-intro { border-left-color: var(--warm); }
+.result-plan[data-level="veryHigh"] .plan-intro {
+  border-left-color: var(--danger);
+  background: var(--danger-light);
+  color: var(--text);
+  font-weight: 600;
 }
 
 .result-leaks ul, .result-plan ol {
