@@ -6,3 +6,5 @@ node_modules/
 backend/.venv/
 backend/*.db
 backend/__pycache__/
+*.xlsx
+~$*
