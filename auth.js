@@ -39,7 +39,15 @@ const Auth = (() => {
     if (token) headers.Authorization = `Bearer ${token}`;
     const res = await fetch(`${apiBase()}${path}`, { ...options, headers });
     const data = await res.json().catch(() => ({}));
-    if (!res.ok) throw new Error(data.detail || data.message || "Lỗi kết nối máy chủ");
+    if (!res.ok) {
+      let detail = data.detail ?? data.message ?? "Lỗi kết nối máy chủ";
+      if (Array.isArray(detail)) {
+        detail = detail.map((e) => e.msg || JSON.stringify(e)).join(". ");
+      } else if (typeof detail === "object") {
+        detail = JSON.stringify(detail);
+      }
+      throw new Error(String(detail));
+    }
     return data;
   }
 

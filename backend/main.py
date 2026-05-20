@@ -6,7 +6,7 @@ from fastapi import Depends, FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from jose import JWTError, jwt
-from passlib.context import CryptContext
+import bcrypt
 from pydantic import BaseModel, EmailStr, Field
 
 from database import get_db, init_db, row_to_dict, utc_now
@@ -15,7 +15,13 @@ SECRET_KEY = os.getenv("MLT_SECRET_KEY", "dev-secret-change-in-production-mlt-20
 ALGORITHM = "HS256"
 ACCESS_TOKEN_EXPIRE_DAYS = 30
 
-pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
+
+def hash_password(password: str) -> str:
+    return bcrypt.hashpw(password.encode("utf-8"), bcrypt.gensalt()).decode("utf-8")
+
+
+def verify_password(password: str, password_hash: str) -> bool:
+    return bcrypt.checkpw(password.encode("utf-8"), password_hash.encode("utf-8"))
 security = HTTPBearer(auto_error=False)
 
 app = FastAPI(title="MoneyLeakTest API", version="1.0.0")
@@ -99,7 +105,7 @@ def health():
 
 @app.post("/api/auth/register")
 def register(body: RegisterBody):
-    password_hash = pwd_context.hash(body.password)
+    password_hash = hash_password(body.password)
     with get_db() as conn:
         exists = conn.execute("SELECT id FROM users WHERE email = ?", (body.email.lower(),)).fetchone()
         if exists:
@@ -126,7 +132,7 @@ def login(body: LoginBody):
             "SELECT id, email, full_name, phone, password_hash, created_at FROM users WHERE email = ?",
             (body.email.lower(),),
         ).fetchone()
-    if not row or not pwd_context.verify(body.password, row["password_hash"]):
+    if not row or not verify_password(body.password, row["password_hash"]):
         raise HTTPException(401, "Email hoặc mật khẩu không đúng")
     user = row_to_dict(row)
     del user["password_hash"]

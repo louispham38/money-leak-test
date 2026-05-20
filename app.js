@@ -445,6 +445,7 @@ function initAuthUI() {
   authForm?.addEventListener("submit", async (e) => {
     e.preventDefault();
     const errEl = document.getElementById("auth-error");
+    const submitBtn = document.getElementById("auth-submit");
     errEl.textContent = "";
     const body = {
       email: document.getElementById("auth-email").value,
@@ -452,6 +453,8 @@ function initAuthUI() {
       phone: document.getElementById("auth-phone").value,
       password: document.getElementById("auth-password").value,
     };
+    submitBtn.disabled = true;
+    submitBtn.textContent = "Đang xử lý...";
     try {
       if (authMode === "register") await Auth.register(body);
       else await Auth.login({ email: body.email, password: body.password });
@@ -474,7 +477,15 @@ function initAuthUI() {
       closeAuth();
       window.location.href = "dashboard.html";
     } catch (err) {
-      errEl.textContent = err.message || "Có lỗi xảy ra";
+      const msg = err.message || "Có lỗi xảy ra";
+      errEl.textContent =
+        msg.includes("fetch") || msg.includes("Failed") || msg.includes("Load failed")
+          ? "Không kết nối được máy chủ. Đợi 30–60 giây (API đang khởi động) rồi thử lại."
+          : msg;
+    } finally {
+      submitBtn.disabled = false;
+      submitBtn.textContent =
+        authMode === "register" ? "Đăng ký & xem kết quả" : "Đăng nhập";
     }
   });
 
