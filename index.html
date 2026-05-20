@@ -26,6 +26,7 @@
         <a href="#problems">Vấn đề</a>
         <a href="#test">Bài test</a>
         <a href="#faq">FAQ</a>
+        <span id="nav-account"></span>
       </nav>
       <a href="#test" class="btn btn-primary btn-sm header-cta">Làm Bài Test — Miễn Phí</a>
       <button class="menu-toggle" aria-label="Mở menu" aria-expanded="false">
@@ -165,7 +166,7 @@
         <div class="test-card">
           <span class="test-card-icon">🔍</span>
           <h3>Bắt Đầu Bài Test Của Bạn</h3>
-          <p>15 câu hỏi · 3 phút · Kết quả ngay lập tức</p>
+          <p>20 câu hỏi · 5–7 phút · Kết quả sau khi đăng ký</p>
           <button type="button" class="btn btn-primary btn-lg open-test">🚀 Làm Bài Test Ngay — Miễn Phí</button>
           <div class="test-features">
             <span>🔒 Không cần tài khoản</span>
@@ -279,21 +280,53 @@
         <div class="result-meter">
           <div class="meter-track"><div class="meter-fill" id="result-meter-fill"></div></div>
         </div>
-        <div class="result-leaks">
-          <h3>Top lỗ hổng của bạn</h3>
-          <ul id="result-leaks"></ul>
+        <div id="auth-gate" class="auth-gate" hidden>
+          <p>Đăng ký tài khoản miễn phí để xem <strong>top lỗ hổng</strong>, <strong>plan hành động</strong> và lưu kết quả vào khu vực cá nhân.</p>
+          <button type="button" class="btn btn-primary btn-block open-auth" data-mode="register">Đăng ký — Xem kết quả đầy đủ</button>
+          <button type="button" class="btn btn-ghost btn-block open-auth" data-mode="login">Đã có tài khoản? Đăng nhập</button>
         </div>
-        <div class="result-plan">
-          <h3 id="plan-title">Plan hành động 3 bước</h3>
-          <p id="plan-intro" class="plan-intro"></p>
-          <ol id="result-plan"></ol>
+        <div id="results-full">
+          <div class="result-leaks">
+            <h3>Top lỗ hổng của bạn</h3>
+            <ul id="result-leaks"></ul>
+          </div>
+          <div class="result-plan">
+            <h3 id="plan-title">Plan hành động 3 bước</h3>
+            <p id="plan-intro" class="plan-intro"></p>
+            <ol id="result-plan"></ol>
+          </div>
+          <a href="dashboard.html" class="btn btn-primary btn-block">Vào khu vực cá nhân →</a>
+          <a href="https://zalo.me/g/gkbvgqaoxnggs2p8euih" target="_blank" rel="noopener noreferrer" class="btn btn-zalo btn-block">Tham gia nhóm Zalo</a>
         </div>
-        <a href="https://zalo.me/g/gkbvgqaoxnggs2p8euih" target="_blank" rel="noopener noreferrer" class="btn btn-zalo btn-block">Chia sẻ kết quả trong nhóm Zalo</a>
         <button type="button" class="btn btn-ghost btn-block" id="retake-test">Làm lại bài test</button>
       </div>
     </div>
   </div>
 
+  <div class="modal-overlay" id="auth-modal" aria-hidden="true" role="dialog">
+    <div class="modal modal-auth">
+      <div class="modal-header">
+        <h2>Tài khoản MoneyLeakTest</h2>
+        <button type="button" class="modal-close" id="auth-close" aria-label="Đóng">×</button>
+      </div>
+      <div class="auth-tabs">
+        <button type="button" class="auth-tab active" data-mode="register">Đăng ký</button>
+        <button type="button" class="auth-tab" data-mode="login">Đăng nhập</button>
+      </div>
+      <form id="auth-form" class="auth-form">
+        <label>Họ và tên<input type="text" id="auth-name" required autocomplete="name" /></label>
+        <label>Email<input type="email" id="auth-email" required autocomplete="email" /></label>
+        <label>Số điện thoại<input type="tel" id="auth-phone" required autocomplete="tel" /></label>
+        <label>Mật khẩu<input type="password" id="auth-password" required minlength="6" autocomplete="new-password" /></label>
+        <p id="auth-error" class="auth-error"></p>
+        <button type="submit" class="btn btn-primary btn-block" id="auth-submit">Đăng ký & xem kết quả</button>
+      </form>
+    </div>
+  </div>
+
+  <script src="config.js"></script>
+  <script src="questions.js"></script>
+  <script src="auth.js"></script>
   <script src="app.js"></script>
 </body>
 </html>

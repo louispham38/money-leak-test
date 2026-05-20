@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Khu vực cá nhân — MoneyLeakTest</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="dashboard.css" />
+</head>
+<body class="dashboard-body">
+  <header class="dash-header">
+    <div class="container dash-header-inner">
+      <a href="index.html" class="logo"><span class="logo-icon">💧</span><span>MoneyLeakTest</span></a>
+      <div class="dash-user">
+        <span id="dash-greeting"></span>
+        <button type="button" class="btn btn-ghost btn-sm" id="btn-logout">Đăng xuất</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="container dash-main" id="dash-main" hidden>
+    <section class="dash-hero">
+      <h1>Khu vực cá nhân</h1>
+      <p id="dash-subtitle">Theo dõi kết quả bài test, mục tiêu tài chính và tài nguyên cộng đồng.</p>
+    </section>
+
+    <div class="dash-grid">
+      <section class="dash-card dash-card-wide" id="card-result">
+        <h2>Kết quả bài test gần nhất</h2>
+        <div id="no-result" class="empty-state" hidden>
+          <p>Bạn chưa có kết quả nào được lưu.</p>
+          <a href="index.html#test" class="btn btn-primary">Làm bài test ngay</a>
+        </div>
+        <div id="result-content" hidden>
+          <div class="dash-score-row">
+            <span class="dash-score" id="dash-score">—</span>
+            <span class="dash-level" id="dash-level"></span>
+          </div>
+          <div class="meter-track large"><div class="meter-fill large" id="dash-meter"></div></div>
+          <h3>Top lỗ hổng</h3>
+          <ul id="dash-leaks" class="dash-list"></ul>
+          <h3 id="dash-plan-title"></h3>
+          <p id="dash-plan-intro" class="plan-intro"></p>
+          <ol id="dash-plan" class="dash-list numbered"></ol>
+        </div>
+      </section>
+
+      <section class="dash-card" id="card-goals">
+        <h2>Mục tiêu tài chính</h2>
+        <form id="goals-form" class="goals-form">
+          <label>Thu nhập hàng tháng (VNĐ)<input type="number" id="goal-income" min="0" step="100000" placeholder="15000000" /></label>
+          <label>Mục tiêu tiết kiệm / tháng (VNĐ)<input type="number" id="goal-savings" min="0" step="100000" placeholder="3000000" /></label>
+          <label>Quỹ khẩn cấp mục tiêu (VNĐ)<input type="number" id="goal-emergency" min="0" step="1000000" placeholder="30000000" /></label>
+          <label>Mục tiêu trả nợ (VNĐ)<input type="number" id="goal-debt" min="0" step="100000" placeholder="0" /></label>
+          <label>Ghi chú mục tiêu<textarea id="goal-note" rows="3" placeholder="VD: Tiết kiệm 50tr để mua xe trong 2 năm..."></textarea></label>
+          <button type="submit" class="btn btn-primary btn-block">Lưu mục tiêu</button>
+          <p id="goals-msg" class="form-msg"></p>
+        </form>
+      </section>
+
+      <section class="dash-card dash-card-app">
+        <h2>App ghi nhận Thu / Chi</h2>
+        <p>Quản lý dòng tiền hàng ngày với app <strong>Thu Chi Web</strong> — cùng Google Sheet, dashboard trực quan, nhập giao dịch nhanh.</p>
+        <ul class="feature-list">
+          <li>Dashboard tổng thu/chi/chênh lệch theo tháng</li>
+          <li>Nhập thu/chi trực tiếp lên Google Sheet</li>
+          <li>Biểu đồ chi theo danh mục & 6 tháng</li>
+          <li>Kế hoạch phân bổ 7 quỹ tài chính</li>
+        </ul>
+        <a href="#" id="thu-chi-link" target="_blank" rel="noopener noreferrer" class="btn btn-primary btn-block">Mở app Thu / Chi →</a>
+        <p class="hint">Chạy local: <code>cd thu-chi-web && bash start.sh</code></p>
+      </section>
+
+      <section class="dash-card">
+        <h2>Cộng đồng Zalo</h2>
+        <p>Nhóm <strong>Thịnh Vượng - Hạnh Phúc</strong> — học và thực hành cùng nhau.</p>
+        <a href="https://zalo.me/g/gkbvgqaoxnggs2p8euih" target="_blank" rel="noopener noreferrer" class="btn btn-zalo btn-block">Tham gia nhóm Zalo</a>
+      </section>
+
+      <section class="dash-card dash-card-soon">
+        <h2>Workshop & Coaching 1-1</h2>
+        <span class="badge-soon">Sắp mở</span>
+        <p>Chương trình workshop nhóm và coaching cá nhân 1-1 sẽ được cập nhật tại đây. Bạn sẽ nhận thông báo qua email đã đăng ký.</p>
+        <ul class="feature-list muted">
+          <li>Workshop: Khóa rò rỉ tài chính 4 tuần</li>
+          <li>Coaching 1-1: Plan tài chính cá nhân hóa</li>
+        </ul>
+      </section>
+    </div>
+  </main>
+
+  <div id="dash-login-required" class="dash-login-required" hidden>
+    <div class="container">
+      <h2>Vui lòng đăng nhập</h2>
+      <p>Bạn cần tài khoản để truy cập khu vực cá nhân.</p>
+      <a href="index.html" class="btn btn-primary">Về trang chủ & đăng ký</a>
+    </div>
+  </div>
+
+  <script src="config.js"></script>
+  <script src="auth.js"></script>
+  <script src="dashboard.js"></script>
+</body>
+</html>

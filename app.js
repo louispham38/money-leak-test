@@ -1,4 +1,5 @@
 const LEAKS = [
+  { icon: "💰", title: "Chi phí cố định & dòng tiền", desc: "Thu-Chi âm, thẻ tín dụng trả tối thiểu, chi phí tăng dần... Những \"lỗ hổng nền\" khiến bạn không bao giờ thoát vòng xoáy thiếu tiền.", pct: 85, key: "cost" },
   { icon: "📱", title: 'Subscription "Zombie"', desc: "Netflix, Spotify, gym, app... bạn trả tiền hàng tháng nhưng <strong>không dùng</strong>. Trung bình mỗi người mất 800K–2tr/tháng vào subscriptions không nhớ.", pct: 91, key: "subscription" },
   { icon: "🛒", title: "Mua Sắm Cảm Xúc", desc: 'Shopee flash sale, TikTok Shop, "mua cho vui"... Mỗi lần nhỏ, cộng lại <strong>3–7 triệu/tháng</strong> mà không hay biết.', pct: 84, key: "shopping" },
   { icon: "💳", title: "Lãi Vay & Thẻ Tín Dụng", desc: "Trả mức tối thiểu, lãi kép nuốt chửng tiết kiệm. <strong>Lãi thẻ tín dụng có thể lên 36%/năm</strong> — bạn có biết mình đang trả bao nhiêu không?", pct: 67, key: "debt" },
@@ -15,152 +16,16 @@ const TESTIMONIALS = [
 
 const FAQ = [
   { q: "Bài test này có mất phí không?", a: "<strong>Hoàn toàn miễn phí 100%.</strong> Không cần thẻ tín dụng, không cần tài khoản. Bạn chỉ cần làm bài test và nhận kết quả ngay lập tức — không có bước nào yêu cầu thanh toán.", open: true },
-  { q: "Bài test mất bao lâu?", a: "<strong>Khoảng 3–5 phút.</strong> Chỉ có 15 câu hỏi ngắn, lựa chọn nhanh. Bạn không cần chuẩn bị hay tra cứu gì — chỉ cần trả lời theo cảm nhận thực tế của mình." },
+  { q: "Bài test mất bao lâu?", a: "<strong>Khoảng 5–7 phút.</strong> Chỉ có 20 câu hỏi ngắn, lựa chọn nhanh. Bạn không cần chuẩn bị hay tra cứu gì — chỉ cần trả lời theo cảm nhận thực tế của mình." },
   { q: "Kết quả có chính xác không?", a: "Kết quả chính xác đến mức bạn trả lời thành thật. Bài test được thiết kế dựa trên <strong>các mẫu chi tiêu phổ biến</strong> của người Việt và tâm lý học hành vi tài chính. Trả lời càng thật → insight càng có giá trị." },
-  { q: "Tôi có cần nhập thông tin cá nhân không?", a: "Không cần nhập tên hay số điện thoại để làm bài test. Nếu bạn muốn nhận kết quả chi tiết qua email, bạn có thể nhập — nhưng <strong>hoàn toàn tự nguyện</strong>. Chúng tôi không spam." },
-  { q: "Sau khi làm xong tôi sẽ nhận được gì?", a: "Bạn sẽ nhận ngay: <strong>(1)</strong> Điểm \"rò rỉ tài chính\" trên thang 0–100, <strong>(2)</strong> Top 2–3 lỗ hổng lớn nhất theo thứ tự ưu tiên, <strong>(3)</strong> Plan hành động 3 bước cụ thể để bắt đầu khóa rò rỉ từ tuần này." },
+  { q: "Tôi có cần đăng ký tài khoản không?", a: "Bạn có thể làm bài test miễn phí ngay. <strong>Đăng ký tài khoản</strong> (email, họ tên, SĐT) để lưu kết quả, xem plan hành động đầy đủ và truy cập khu vực cá nhân." },
+  { q: "Sau khi đăng ký tôi sẽ nhận được gì?", a: "Kết quả bài test, plan hành động theo mức rò rỉ, mục tiêu tài chính, giới thiệu app Thu-Chi, nhóm Zalo — và sớm có workshop, coaching 1-1." },
 ];
 
-const QUESTIONS = [
-  {
-    text: "Mỗi cuối tháng, bạn có biết tiền đã tiêu vào đâu không?",
-    options: [
-      { label: "Hoàn toàn không biết", scores: { daily: 9 } },
-      { label: "Hiếm khi biết", scores: { daily: 6 } },
-      { label: "Biết một chút", scores: { daily: 4 } },
-      { label: "Hầu như biết", scores: { daily: 2 } },
-      { label: "Biết rất rõ từng thứ", scores: {} },
-    ],
-  },
-  {
-    text: "Bạn có bao nhiêu dịch vụ online/offline (app, gym, streaming...) đang trả nhưng ít dùng?",
-    options: [
-      { label: "Không có", scores: {} },
-      { label: "1–2 cái", scores: { subscription: 3 } },
-      { label: "3–5 cái", scores: { subscription: 5 } },
-      { label: "Hơn 5 cái", scores: { subscription: 8 } },
-    ],
-  },
-  {
-    text: "Khi đăng ký free trial (Netflix, Spotify, app...), bạn có nhớ huỷ trước khi bắt đầu tính phí không?",
-    options: [
-      { label: "Luôn nhớ huỷ đúng lúc", scores: {} },
-      { label: "Đa số nhớ huỷ", scores: { subscription: 2 } },
-      { label: "Thỉnh thoảng quên", scores: { subscription: 5 } },
-      { label: "Hầu như luôn quên — và bị trừ tiền tự động", scores: { subscription: 8 } },
-    ],
-  },
-  {
-    text: "Bạn phản ứng như thế nào với các chương trình Flash sale / Khuyến mãi trên internet?",
-    options: [
-      { label: "Bỏ qua", scores: {} },
-      { label: "Xem nhưng ít mua", scores: { shopping: 2 } },
-      { label: "Mua nếu thích", scores: { shopping: 5 } },
-      { label: "Mua ngay, không suy nghĩ nhiều", scores: { shopping: 8 } },
-    ],
-  },
-  {
-    text: "Bạn có sử dụng thẻ tín dụng không?",
-    options: [
-      { label: "Không dùng thẻ TD", scores: {} },
-      { label: "Trả full mỗi tháng", scores: {} },
-      { label: "Trả một phần", scores: { debt: 5 } },
-      { label: "Chỉ trả tối thiểu", scores: { debt: 9 } },
-    ],
-  },
-  {
-    text: "Chi phí tiêu vặt của bạn: trà sữa, cà phê, ăn ngoài... mỗi tháng bao nhiêu?",
-    options: [
-      { label: "Dưới 500K", scores: {} },
-      { label: "500K – 1.5tr", scores: { daily: 3 } },
-      { label: "1.5tr – 3tr", scores: { daily: 5 } },
-      { label: "Trên 3tr", scores: { daily: 8 } },
-    ],
-  },
-  {
-    text: "Bạn có đang đầu tư tài chính như BĐS, Crypto, chứng khoán... không?",
-    options: [
-      { label: "Không", scores: {} },
-      { label: "Có, nhưng số tiền nhỏ", scores: { investment: 3 } },
-      { label: "Có, đáng kể", scores: { investment: 6 } },
-      { label: "Có, và đã thua lỗ", scores: { investment: 9 } },
-    ],
-  },
-  {
-    text: "Bạn có đang hiểu rõ những khoản đầu tư của bạn không?",
-    options: [
-      { label: "Không", scores: { investment: 9 } },
-      { label: "Chỉ nghe theo bạn bè, không tìm hiểu nhiều", scores: { investment: 6 } },
-      { label: "Có đầu tư học tập tìm hiểu", scores: { investment: 3 } },
-      { label: "Có nhiều kinh nghiệm và kiến thức", scores: {} },
-    ],
-  },
-  {
-    text: "Áp lực chi tiêu vì đám cưới, nhậu, quà tặng, du lịch nhóm...",
-    options: [
-      { label: "Không ảnh hưởng", scores: {} },
-      { label: "Đôi khi", scores: { social: 3 } },
-      { label: "Thường xuyên", scores: { social: 6 } },
-      { label: "Rất áp lực, chi quá khả năng", scores: { social: 9 } },
-    ],
-  },
-  {
-    text: "Khi bạn bè khoe du lịch / hàng hiệu / quán sang trên mạng xã hội, bạn có cảm thấy áp lực phải chi tương tự không?",
-    options: [
-      { label: "Không bao giờ", scores: {} },
-      { label: "Đôi khi", scores: { social: 3 } },
-      { label: "Khá thường xuyên", scores: { social: 6 } },
-      { label: "Rất thường, và đã từng chi vượt khả năng", scores: { social: 9 } },
-    ],
-  },
-  {
-    text: "Bạn có ngân sách chi tiêu hàng tháng không?",
-    options: [
-      { label: "Có, và tuân thủ tốt", scores: {} },
-      { label: "Có, nhưng hay vượt", scores: { daily: 2, shopping: 2 } },
-      { label: "Có nhưng không theo dõi", scores: { daily: 4 } },
-      { label: "Không có", scores: { daily: 5, shopping: 3 } },
-    ],
-  },
-  {
-    text: "Khi buồn/stress, bạn có mua sắm để \"xả\" không?",
-    options: [
-      { label: "Không bao giờ", scores: {} },
-      { label: "Hiếm khi", scores: { shopping: 2 } },
-      { label: "Thỉnh thoảng", scores: { shopping: 5 } },
-      { label: "Thường xuyên", scores: { shopping: 8 } },
-    ],
-  },
-  {
-    text: "Bạn biết chính xác tổng lãi vay / thẻ TD đang trả mỗi tháng không?",
-    options: [
-      { label: "Biết rõ", scores: {} },
-      { label: "Biết ước lượng", scores: { debt: 2 } },
-      { label: "Không chắc", scores: { debt: 5 } },
-      { label: "Không biết", scores: { debt: 8 } },
-    ],
-  },
-  {
-    text: "So với thu nhập, mức tiết kiệm của bạn...",
-    options: [
-      { label: "Ổn định, có kế hoạch", scores: {} },
-      { label: "Tiết kiệm được nhưng ít", scores: { daily: 2 } },
-      { label: "Gần như không tiết kiệm", scores: { daily: 4, shopping: 2 } },
-      { label: "Thường thâm hụt cuối tháng", scores: { daily: 5, debt: 3, shopping: 2 } },
-    ],
-  },
-  {
-    text: "Nếu mất 5 triệu không rõ lý do, bạn sẽ...",
-    options: [
-      { label: "Biết ngay đi đâu", scores: {} },
-      { label: "Tìm ra trong vài ngày", scores: { daily: 2 } },
-      { label: "Khó xác định", scores: { daily: 5, subscription: 2 } },
-      { label: "Chẳng biết luôn", scores: { daily: 6, subscription: 3, shopping: 2 } },
-    ],
-  },
-];
+let lastReadiness = null;
 
 const LEAK_LABELS = {
+  cost: "Chi phí cố định & dòng tiền",
   subscription: "Subscription không dùng",
   shopping: "Mua sắm cảm xúc",
   debt: "Lãi vay & thẻ tín dụng",
@@ -215,6 +80,11 @@ const PLANS = {
       "Lập ngân sách \"xã giao\" mỗi tháng để biết mình có gì để chi.",
       "Tạo nhóm bạn cùng triết lý tài chính — củng cố thói quen tốt.",
     ],
+    cost: [
+      "Kiểm tra số dư Thu-Chi mỗi tháng — duy trì dương ít nhất 10% thu nhập.",
+      "Review chi phí cố định 1 lần/quý — cắt khoản không cần thiết.",
+      "Trả full thẻ tín dụng đúng hạn — tránh lãi phạt.",
+    ],
   },
   medium: {
     daily: [
@@ -246,6 +116,11 @@ const PLANS = {
       "Đặt ngân sách \"xã giao\" cố định (10–15% thu nhập) — không vượt quá.",
       "Học nói \"không\" lịch sự với lời mời vượt khả năng.",
       "Đề xuất hoạt động ít tốn kém: cà phê thay nhậu, BBQ nhà thay nhà hàng.",
+    ],
+    cost: [
+      "Lập bảng Thu-Chi 3 tháng gần nhất — xác định tháng nào âm và vì sao.",
+      "Giảm 10% chi phí cố định: hội viên, gói data, bảo hiểm trùng lặp.",
+      "Chuyển từ trả tối thiểu thẻ TD sang trả ít nhất 50% dư nợ mỗi tháng.",
     ],
   },
   high: {
@@ -279,6 +154,11 @@ const PLANS = {
       "Unfollow / tắt thông báo tài khoản gây cảm giác \"phải so kè\".",
       "Lập danh sách quà cố định cho cả năm — không mua quà bột phát.",
     ],
+    cost: [
+      "Khóa chi phí cố định: huỷ mọi subscription không thiết yếu trong 7 ngày.",
+      "Ngừng cho vay không lãi suất rõ ràng — thu hồi nợ cũ trước khi chi thêm.",
+      "Đặt mục tiêu Thu-Chi dương trong 60 ngày — cắt 20% chi tiêu biến động.",
+    ],
   },
   veryHigh: {
     daily: [
@@ -311,11 +191,16 @@ const PLANS = {
       "Nói thẳng với bạn bè thân: \"mình đang quản lại tài chính, giai đoạn này hạn chế tụ tập\".",
       "Tìm cộng đồng cùng mục tiêu tài chính — bao quanh bằng người tiết kiệm thay vì người chi tiêu nhiều.",
     ],
+    cost: [
+      "ĐÓNG BĂNG chi phí mới 30 ngày — chỉ chi ăn, đi lại, hoá đơn bắt buộc.",
+      "Thu hồi toàn bộ tiền cho vay — không cho mượn thêm cho đến khi dương 3 tháng liên tiếp.",
+      "Liên hệ NH đàm phán lãi / gói nợ — tránh trả tối thiểu vô thời hạn.",
+    ],
   },
 };
 
 let currentQuestion = 0;
-const leakScores = { subscription: 0, shopping: 0, debt: 0, daily: 0, investment: 0, social: 0 };
+const leakScores = { cost: 0, subscription: 0, shopping: 0, debt: 0, daily: 0, investment: 0, social: 0, status: 0 };
 
 function renderStatic() {
   document.getElementById("leak-grid").innerHTML = LEAKS.map(
@@ -378,9 +263,12 @@ function closeModal() {
 
 function resetQuiz() {
   currentQuestion = 0;
+  lastReadiness = null;
   Object.keys(leakScores).forEach((k) => { leakScores[k] = 0; });
   document.getElementById("quiz-view").hidden = false;
   document.getElementById("results-view").hidden = true;
+  document.getElementById("auth-gate")?.setAttribute("hidden", "");
+  document.getElementById("results-full")?.removeAttribute("hidden");
   renderQuestion();
 }
 
@@ -408,10 +296,12 @@ function renderQuestion() {
 }
 
 function selectAnswer(index) {
-  const scores = QUESTIONS[currentQuestion].options[index].scores;
-  Object.entries(scores).forEach(([key, val]) => {
+  const q = QUESTIONS[currentQuestion];
+  const opt = q.options[index];
+  Object.entries(opt.scores || {}).forEach(([key, val]) => {
     leakScores[key] = (leakScores[key] || 0) + val;
   });
+  if (q.meta === "status" && opt.readiness) lastReadiness = opt.readiness;
 
   currentQuestion++;
   if (currentQuestion < QUESTIONS.length) {
@@ -421,49 +311,180 @@ function selectAnswer(index) {
   }
 }
 
-function showResults() {
-  const maxPossible = 131;
-  const totalRaw = Object.values(leakScores).reduce((a, b) => a + b, 0);
+function buildResultPayload() {
+  const maxPossible = typeof SCORE_MAX_RAW !== "undefined" ? SCORE_MAX_RAW : 164;
+  const scorable = Object.entries(leakScores).filter(([k]) => k !== "status");
+  const totalRaw = scorable.reduce((a, [, v]) => a + v, 0);
   const score = Math.min(100, Math.round((totalRaw / maxPossible) * 100));
   const level = getLevel(score);
 
-  const sorted = Object.entries(leakScores)
+  let sorted = scorable
     .filter(([, v]) => v > 0)
     .sort((a, b) => b[1] - a[1])
     .slice(0, 3);
+  if (sorted.length === 0) sorted.push(["daily", 1]);
 
-  if (sorted.length === 0) {
-    sorted.push(["daily", 1]);
-  }
+  const topKey = sorted[0][0];
+  const planSet = PLANS[level.key] || PLANS.medium;
+  const planSteps = planSet[topKey] || planSet.daily;
+
+  return {
+    score,
+    level_key: level.key,
+    level_label: level.label,
+    level_color: level.color,
+    top_leaks: sorted.map(([key]) => ({ key, label: LEAK_LABELS[key] })),
+    plan_title: PLAN_TITLES[level.key],
+    plan_intro: PLAN_INTROS[level.key],
+    plan_steps: planSteps,
+    leak_scores: { ...leakScores },
+    readiness: lastReadiness,
+  };
+}
+
+function renderResultUI(payload) {
+  document.getElementById("result-score").textContent = payload.score;
+  const levelEl = document.getElementById("result-level");
+  levelEl.textContent = `Mức rò rỉ: ${payload.level_label}`;
+  levelEl.style.color = payload.level_color;
+  document.getElementById("result-meter-fill").style.width = `${payload.score}%`;
+  document.getElementById("result-leaks").innerHTML = payload.top_leaks
+    .map((l, i) => `<li><strong>#${i + 1}</strong> ${l.label}</li>`)
+    .join("");
+  document.querySelector(".result-plan").setAttribute("data-level", payload.level_key);
+  document.getElementById("plan-title").textContent = payload.plan_title;
+  document.getElementById("plan-intro").textContent = payload.plan_intro;
+  document.getElementById("result-plan").innerHTML = payload.plan_steps
+    .map((step) => `<li>${step}</li>`)
+    .join("");
+  document.getElementById("score-status").textContent = payload.level_label;
+  document.getElementById("preview-score").textContent = payload.score;
+  document.getElementById("preview-meter").style.width = `${payload.score}%`;
+  document.getElementById("score-status").style.color = payload.level_color;
+}
+
+function showResults() {
+  const payload = buildResultPayload();
+  sessionStorage.setItem("mlt_pending_result", JSON.stringify(payload));
 
   document.getElementById("quiz-view").hidden = true;
   document.getElementById("results-view").hidden = false;
 
-  document.getElementById("result-score").textContent = score;
-  const levelEl = document.getElementById("result-level");
-  levelEl.textContent = `Mức rò rỉ: ${level.label}`;
-  levelEl.style.color = level.color;
+  renderResultUI(payload);
 
-  document.getElementById("result-meter-fill").style.width = `${score}%`;
+  const authGate = document.getElementById("auth-gate");
+  const resultsFull = document.getElementById("results-full");
 
-  document.getElementById("result-leaks").innerHTML = sorted
-    .map(([key], i) => `<li><strong>#${i + 1}</strong> ${LEAK_LABELS[key]}</li>`)
-    .join("");
+  if (typeof Auth !== "undefined" && Auth.isLoggedIn()) {
+    authGate?.setAttribute("hidden", "");
+    resultsFull?.removeAttribute("hidden");
+    Auth.saveTestResult({
+      score: payload.score,
+      level_key: payload.level_key,
+      level_label: payload.level_label,
+      top_leaks: payload.top_leaks,
+      plan_title: payload.plan_title,
+      plan_intro: payload.plan_intro,
+      plan_steps: payload.plan_steps,
+      leak_scores: payload.leak_scores,
+      readiness: payload.readiness,
+    });
+  } else {
+    authGate?.removeAttribute("hidden");
+    resultsFull?.setAttribute("hidden", "");
+  }
+}
 
-  const topKey = sorted[0][0];
-  const planSet = PLANS[level.key] || PLANS.medium;
-  const plan = planSet[topKey] || planSet.daily;
-  document.querySelector(".result-plan").setAttribute("data-level", level.key);
-  document.getElementById("plan-title").textContent = PLAN_TITLES[level.key];
-  document.getElementById("plan-intro").textContent = PLAN_INTROS[level.key];
-  document.getElementById("result-plan").innerHTML = plan
-    .map((step) => `<li>${step}</li>`)
-    .join("");
+function initAuthUI() {
+  const authModal = document.getElementById("auth-modal");
+  const authForm = document.getElementById("auth-form");
+  const authTabs = document.querySelectorAll(".auth-tab");
+  let authMode = "register";
 
-  document.getElementById("score-status").textContent = level.label;
-  document.getElementById("preview-score").textContent = score;
-  document.getElementById("preview-meter").style.width = `${score}%`;
-  document.getElementById("score-status").style.color = level.color;
+  function openAuth(mode) {
+    authMode = mode || "register";
+    authTabs.forEach((t) => t.classList.toggle("active", t.dataset.mode === authMode));
+    document.getElementById("auth-submit").textContent =
+      authMode === "register" ? "Đăng ký & xem kết quả" : "Đăng nhập";
+    authModal?.classList.add("active");
+    authModal?.setAttribute("aria-hidden", "false");
+  }
+
+  function closeAuth() {
+    authModal?.classList.remove("active");
+    authModal?.setAttribute("aria-hidden", "true");
+  }
+
+  document.querySelectorAll(".open-auth").forEach((btn) => {
+    btn.addEventListener("click", () => openAuth(btn.dataset.mode || "register"));
+  });
+  document.getElementById("auth-close")?.addEventListener("click", closeAuth);
+  authModal?.addEventListener("click", (e) => {
+    if (e.target.id === "auth-modal") closeAuth();
+  });
+
+  function toggleAuthFields() {
+    const showProfile = authMode === "register";
+    document.getElementById("auth-name").closest("label").style.display = showProfile ? "" : "none";
+    document.getElementById("auth-phone").closest("label").style.display = showProfile ? "" : "none";
+    document.getElementById("auth-name").required = showProfile;
+    document.getElementById("auth-phone").required = showProfile;
+  }
+
+  authTabs.forEach((tab) => {
+    tab.addEventListener("click", () => {
+      authMode = tab.dataset.mode;
+      authTabs.forEach((t) => t.classList.toggle("active", t === tab));
+      document.getElementById("auth-submit").textContent =
+        authMode === "register" ? "Đăng ký & xem kết quả" : "Đăng nhập";
+      toggleAuthFields();
+    });
+  });
+  toggleAuthFields();
+
+  authForm?.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const errEl = document.getElementById("auth-error");
+    errEl.textContent = "";
+    const body = {
+      email: document.getElementById("auth-email").value,
+      full_name: document.getElementById("auth-name").value,
+      phone: document.getElementById("auth-phone").value,
+      password: document.getElementById("auth-password").value,
+    };
+    try {
+      if (authMode === "register") await Auth.register(body);
+      else await Auth.login({ email: body.email, password: body.password });
+
+      const pending = sessionStorage.getItem("mlt_pending_result");
+      if (pending) {
+        const p = JSON.parse(pending);
+        await Auth.saveTestResult({
+          score: p.score,
+          level_key: p.level_key,
+          level_label: p.level_label,
+          top_leaks: p.top_leaks,
+          plan_title: p.plan_title,
+          plan_intro: p.plan_intro,
+          plan_steps: p.plan_steps,
+          leak_scores: p.leak_scores,
+          readiness: p.readiness,
+        });
+      }
+      closeAuth();
+      window.location.href = "dashboard.html";
+    } catch (err) {
+      errEl.textContent = err.message || "Có lỗi xảy ra";
+    }
+  });
+
+  const user = typeof Auth !== "undefined" ? Auth.getUser() : null;
+  const navAccount = document.getElementById("nav-account");
+  if (user && navAccount) {
+    navAccount.innerHTML = `<a href="dashboard.html">Xin chào, ${user.full_name.split(" ")[0]}</a>`;
+    document.querySelector(".header-cta")?.setAttribute("href", "dashboard.html");
+    document.querySelector(".header-cta").textContent = "Khu vực của tôi";
+  }
 }
 
 function initNav() {
@@ -486,6 +507,7 @@ function initNav() {
 document.addEventListener("DOMContentLoaded", () => {
   renderStatic();
   initNav();
+  initAuthUI();
 
   document.querySelectorAll(".open-test").forEach((btn) => {
     btn.addEventListener("click", openModal);
