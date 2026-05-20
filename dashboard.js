@@ -6,7 +6,8 @@ const READINESS_MSG = {
 
 async function initDashboard() {
   const cfg = window.MLT_CONFIG || {};
-  document.getElementById("thu-chi-link").href = cfg.THU_CHI_URL || "http://127.0.0.1:5173";
+  document.getElementById("thu-chi-link").href =
+    cfg.THU_CHI_URL || "https://thu-chi-web.onrender.com";
 
   if (!Auth.isLoggedIn()) {
     document.getElementById("dash-login-required").hidden = false;

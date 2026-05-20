@@ -4,9 +4,11 @@
   const isLocal = host === "localhost" || host === "127.0.0.1";
   const PROD_API = "https://money-leak-test-api.onrender.com";
 
+  const PROD_THU_CHI = "https://thu-chi-web.onrender.com";
+
   window.MLT_CONFIG = {
     API_BASE: window.MLT_API_BASE || (isLocal ? "http://127.0.0.1:8000" : PROD_API),
-    THU_CHI_URL: "http://127.0.0.1:5173",
+    THU_CHI_URL: window.MLT_THU_CHI_URL || (isLocal ? "http://127.0.0.1:5173" : PROD_THU_CHI),
     ZALO_GROUP: "https://zalo.me/g/gkbvgqaoxnggs2p8euih",
   };
 })();
