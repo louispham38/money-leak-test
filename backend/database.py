@@ -1,10 +1,11 @@
 import json
+import os
 import sqlite3
 from contextlib import contextmanager
 from datetime import datetime, timezone
 from pathlib import Path
 
-DB_PATH = Path(__file__).parent / "money_leak.db"
+DB_PATH = Path(os.getenv("MLT_DB_PATH", str(Path(__file__).parent / "money_leak.db")))
 
 
 def utc_now() -> str:

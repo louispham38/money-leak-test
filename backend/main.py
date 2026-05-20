@@ -91,9 +91,10 @@ def get_current_user(
     return user
 
 
+@app.get("/ping")
 @app.get("/api/health")
 def health():
-    return {"ok": True}
+    return {"ok": True, "service": "money-leak-test-api"}
 
 
 @app.post("/api/auth/register")

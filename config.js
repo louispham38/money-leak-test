@@ -1,6 +1,12 @@
-/** API backend — đổi URL khi deploy (Render, Railway, v.v.) */
-window.MLT_CONFIG = {
-  API_BASE: window.MLT_API_BASE || "http://127.0.0.1:8000",
-  THU_CHI_URL: "http://127.0.0.1:5173",
-  ZALO_GROUP: "https://zalo.me/g/gkbvgqaoxnggs2p8euih",
-};
+/** Cấu hình frontend — API tự chọn local vs production */
+(function () {
+  const host = window.location.hostname;
+  const isLocal = host === "localhost" || host === "127.0.0.1";
+  const PROD_API = "https://money-leak-test-api.onrender.com";
+
+  window.MLT_CONFIG = {
+    API_BASE: window.MLT_API_BASE || (isLocal ? "http://127.0.0.1:8000" : PROD_API),
+    THU_CHI_URL: "http://127.0.0.1:5173",
+    ZALO_GROUP: "https://zalo.me/g/gkbvgqaoxnggs2p8euih",
+  };
+})();

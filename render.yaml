@@ -1,0 +1,20 @@
+# Render Blueprint — MoneyLeakTest API
+# Deploy: Render Dashboard → New → Blueprint → connect repo louispham38/money-leak-test
+
+services:
+  - type: web
+    name: money-leak-test-api
+    runtime: python
+    region: singapore
+    plan: free
+    rootDir: .
+    buildCommand: pip install -r backend/requirements.txt
+    startCommand: cd backend && uvicorn main:app --host 0.0.0.0 --port $PORT
+    healthCheckPath: /ping
+    envVars:
+      - key: PYTHON_VERSION
+        value: "3.11.15"
+      - key: MLT_SECRET_KEY
+        generateValue: true
+      - key: MLT_CORS_ORIGINS
+        value: "https://louispham38.github.io,http://127.0.0.1:8765,http://localhost:8765"

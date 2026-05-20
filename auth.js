@@ -67,7 +67,13 @@ const Auth = (() => {
       setSession(data.token, data.user);
       return { user: data.user, mode: "api" };
     } catch (err) {
-      if (!err.message.includes("fetch") && !err.message.includes("Failed")) throw err;
+      const msg = String(err.message || "");
+      const isNetwork =
+        msg.includes("fetch") ||
+        msg.includes("Failed") ||
+        msg.includes("NetworkError") ||
+        msg.includes("Load failed");
+      if (!isNetwork) throw err;
     }
     const users = localUsers();
     if (users.some((u) => u.email === body.email)) throw new Error("Email đã được đăng ký (chế độ offline)");
@@ -97,7 +103,13 @@ const Auth = (() => {
       setSession(data.token, data.user);
       return { user: data.user, mode: "api" };
     } catch (err) {
-      if (!err.message.includes("fetch") && !err.message.includes("Failed")) throw err;
+      const msg = String(err.message || "");
+      const isNetwork =
+        msg.includes("fetch") ||
+        msg.includes("Failed") ||
+        msg.includes("NetworkError") ||
+        msg.includes("Load failed");
+      if (!isNetwork) throw err;
     }
     const users = localUsers();
     const user = users.find((u) => u.email === body.email && u.password_hash === hashPassword(password));
