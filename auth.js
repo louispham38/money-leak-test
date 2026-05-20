@@ -180,6 +180,20 @@ const Auth = (() => {
     return all[user.id];
   }
 
+  async function forgotPassword({ email }) {
+    return apiFetch("/api/auth/forgot-password", {
+      method: "POST",
+      body: JSON.stringify({ email: email.trim().toLowerCase() }),
+    });
+  }
+
+  async function resetPassword({ token, password }) {
+    return apiFetch("/api/auth/reset-password", {
+      method: "POST",
+      body: JSON.stringify({ token, password }),
+    });
+  }
+
   return {
     apiBase,
     getToken,
@@ -189,6 +203,8 @@ const Auth = (() => {
     logout,
     register,
     login,
+    forgotPassword,
+    resetPassword,
     saveTestResult,
     getLatestResult,
     getGoals,

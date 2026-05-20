@@ -1178,10 +1178,72 @@ body {
   margin-bottom: 8px;
 }
 
-#nav-account a {
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.header-actions .btn-ghost {
+  background: transparent;
+  color: var(--text);
+  border: 1px solid var(--border);
+  box-shadow: none;
+}
+
+.header-actions .btn-ghost:hover {
+  border-color: var(--primary);
+  color: var(--primary);
+  transform: translateY(-2px);
+}
+
+#nav-account a,
+.nav-link-btn {
   color: var(--primary);
   font-weight: 600;
   text-decoration: none;
+  background: none;
+  border: none;
+  font-family: var(--font);
+  font-size: 0.9rem;
+  cursor: pointer;
+  padding: 0;
+}
+
+.auth-hint {
+  font-size: 0.88rem;
+  color: var(--text-muted);
+  margin-bottom: 16px;
+  line-height: 1.5;
+}
+
+.auth-success {
+  color: var(--accent-dark);
+  font-size: 0.88rem;
+  min-height: 1.2em;
+  margin-bottom: 8px;
+  font-weight: 600;
+}
+
+.auth-forgot-wrap {
+  text-align: right;
+  margin: -4px 0 12px;
+}
+
+.link-btn {
+  background: none;
+  border: none;
+  color: var(--primary);
+  font-family: var(--font);
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: underline;
+  padding: 0;
+}
+
+.link-btn:hover {
+  color: var(--primary-dark);
 }
 
 /* Mobile nav */

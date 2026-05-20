@@ -28,7 +28,10 @@
         <a href="#faq">FAQ</a>
         <span id="nav-account"></span>
       </nav>
-      <a href="#test" class="btn btn-primary btn-sm header-cta">Làm Bài Test — Miễn Phí</a>
+      <div class="header-actions">
+        <button type="button" class="btn btn-ghost btn-sm open-auth" data-mode="login" id="header-login">Đăng nhập</button>
+        <a href="#test" class="btn btn-primary btn-sm header-cta">Làm Bài Test — Miễn Phí</a>
+      </div>
       <button class="menu-toggle" aria-label="Mở menu" aria-expanded="false">
         <span></span><span></span><span></span>
       </button>
@@ -313,14 +316,29 @@
         <button type="button" class="auth-tab active" data-mode="register">Đăng ký</button>
         <button type="button" class="auth-tab" data-mode="login">Đăng nhập</button>
       </div>
-      <form id="auth-form" class="auth-form">
-        <label>Họ và tên<input type="text" id="auth-name" required autocomplete="name" /></label>
-        <label>Email<input type="email" id="auth-email" required autocomplete="email" /></label>
-        <label>Số điện thoại<input type="tel" id="auth-phone" required autocomplete="tel" /></label>
-        <label>Mật khẩu<input type="password" id="auth-password" required minlength="6" autocomplete="new-password" /></label>
-        <p id="auth-error" class="auth-error"></p>
-        <button type="submit" class="btn btn-primary btn-block" id="auth-submit">Đăng ký & xem kết quả</button>
-      </form>
+      <div id="auth-panel-register">
+        <form id="auth-form" class="auth-form">
+          <label>Họ và tên<input type="text" id="auth-name" required autocomplete="name" /></label>
+          <label>Email<input type="email" id="auth-email" required autocomplete="email" /></label>
+          <label>Số điện thoại<input type="tel" id="auth-phone" required autocomplete="tel" /></label>
+          <label>Mật khẩu<input type="password" id="auth-password" required minlength="6" autocomplete="current-password" /></label>
+          <p class="auth-forgot-wrap" id="auth-forgot-wrap" hidden>
+            <button type="button" class="link-btn" id="btn-forgot-open">Quên mật khẩu?</button>
+          </p>
+          <p id="auth-error" class="auth-error"></p>
+          <button type="submit" class="btn btn-primary btn-block" id="auth-submit">Đăng ký & xem kết quả</button>
+        </form>
+      </div>
+      <div id="auth-panel-forgot" hidden>
+        <p class="auth-hint">Nhập email đã đăng ký. Chúng tôi gửi link đặt lại mật khẩu (hiệu lực 1 giờ).</p>
+        <form id="forgot-form" class="auth-form">
+          <label>Email<input type="email" id="forgot-email" required autocomplete="email" /></label>
+          <p id="forgot-error" class="auth-error"></p>
+          <p id="forgot-success" class="auth-success"></p>
+          <button type="submit" class="btn btn-primary btn-block" id="forgot-submit">Gửi link đặt lại mật khẩu</button>
+          <button type="button" class="btn btn-ghost btn-block auth-back-login">← Quay lại đăng nhập</button>
+        </form>
+      </div>
     </div>
   </div>
 

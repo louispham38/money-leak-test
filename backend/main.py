@@ -1,5 +1,8 @@
+import hashlib
 import json
 import os
+import secrets
+from datetime import datetime, timedelta, timezone
 from typing import Optional
 
 from fastapi import Depends, FastAPI, HTTPException
@@ -10,6 +13,7 @@ import bcrypt
 from pydantic import BaseModel, EmailStr, Field
 
 from database import get_db, init_db, row_to_dict, utc_now
+from email_service import send_reset_email, smtp_configured
 
 SECRET_KEY = os.getenv("MLT_SECRET_KEY", "dev-secret-change-in-production-mlt-2026")
 ALGORITHM = "HS256"
@@ -50,6 +54,15 @@ class RegisterBody(BaseModel):
 class LoginBody(BaseModel):
     email: EmailStr
     password: str
+
+
+class ForgotPasswordBody(BaseModel):
+    email: EmailStr
+
+
+class ResetPasswordBody(BaseModel):
+    token: str = Field(min_length=20)
+    password: str = Field(min_length=6, max_length=128)
 
 
 class TestResultBody(BaseModel):
@@ -123,6 +136,90 @@ def register(body: RegisterBody):
         )
     token = create_token(user["id"], user["email"])
     return {"token": token, "user": user}
+
+
+def _frontend_base() -> str:
+    return os.getenv("MLT_FRONTEND_URL", "https://louispham38.github.io/money-leak-test").rstrip("/")
+
+
+def _hash_token(token: str) -> str:
+    return hashlib.sha256(token.encode()).hexdigest()
+
+
+@app.post("/api/auth/forgot-password")
+def forgot_password(body: ForgotPasswordBody):
+    """Luôn trả message giống nhau để không lộ email có tồn tại hay không."""
+    msg_ok = {
+        "message": "Nếu email đã đăng ký, bạn sẽ nhận link đặt lại mật khẩu trong vài phút. Kiểm tra cả hộp thư spam."
+    }
+    if not smtp_configured():
+        raise HTTPException(
+            503,
+            "Hệ thống email chưa sẵn sàng. Vui lòng liên hệ quản trị viên hoặc đăng ký lại tài khoản.",
+        )
+
+    email = body.email.lower()
+    with get_db() as conn:
+        user = conn.execute("SELECT id, email FROM users WHERE email = ?", (email,)).fetchone()
+        if not user:
+            return msg_ok
+
+        raw_token = secrets.token_urlsafe(48)
+        token_hash = _hash_token(raw_token)
+        expires = (datetime.now(timezone.utc) + timedelta(hours=1)).isoformat()
+        conn.execute(
+            "UPDATE password_reset_tokens SET used_at = ? WHERE user_id = ? AND used_at IS NULL",
+            (utc_now(), user["id"]),
+        )
+        conn.execute(
+            """
+            INSERT INTO password_reset_tokens (user_id, token_hash, expires_at, created_at)
+            VALUES (?, ?, ?, ?)
+            """,
+            (user["id"], token_hash, expires, utc_now()),
+        )
+
+    reset_url = f"{_frontend_base()}/reset-password.html?token={raw_token}"
+    try:
+        send_reset_email(user["email"], reset_url)
+    except Exception as e:
+        raise HTTPException(500, f"Không gửi được email: {e}") from e
+
+    return msg_ok
+
+
+@app.post("/api/auth/reset-password")
+def reset_password(body: ResetPasswordBody):
+    token_hash = _hash_token(body.token.strip())
+    now = datetime.now(timezone.utc)
+
+    with get_db() as conn:
+        row = conn.execute(
+            """
+            SELECT id, user_id, expires_at, used_at FROM password_reset_tokens
+            WHERE token_hash = ? ORDER BY id DESC LIMIT 1
+            """,
+            (token_hash,),
+        ).fetchone()
+        if not row:
+            raise HTTPException(400, "Link không hợp lệ hoặc đã hết hạn")
+        if row["used_at"]:
+            raise HTTPException(400, "Link đã được sử dụng. Vui lòng yêu cầu link mới.")
+        expires = datetime.fromisoformat(row["expires_at"].replace("Z", "+00:00"))
+        if now > expires:
+            raise HTTPException(400, "Link đã hết hạn. Vui lòng yêu cầu link mới.")
+
+        password_hash = hash_password(body.password)
+        conn.execute(
+            "UPDATE users SET password_hash = ? WHERE id = ?",
+            (password_hash, row["user_id"]),
+        )
+        conn.execute(
+            "UPDATE password_reset_tokens SET used_at = ? WHERE id = ?",
+            (utc_now(), row["id"]),
+        )
+
+    return {"message": "Đã đặt lại mật khẩu thành công. Bạn có thể đăng nhập ngay."}
 
 
 @app.post("/api/auth/login")

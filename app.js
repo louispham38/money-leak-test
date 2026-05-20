@@ -399,13 +399,29 @@ function initAuthUI() {
   const authModal = document.getElementById("auth-modal");
   const authForm = document.getElementById("auth-form");
   const authTabs = document.querySelectorAll(".auth-tab");
+  const panelRegister = document.getElementById("auth-panel-register");
+  const panelForgot = document.getElementById("auth-panel-forgot");
   let authMode = "register";
+
+  function showPanel(name) {
+    const isForgot = name === "forgot";
+    panelRegister.hidden = isForgot;
+    panelForgot.hidden = !isForgot;
+    authTabs.forEach((t) => {
+      t.style.display = isForgot ? "none" : "";
+    });
+  }
 
   function openAuth(mode) {
     authMode = mode || "register";
+    showPanel("register");
     authTabs.forEach((t) => t.classList.toggle("active", t.dataset.mode === authMode));
     document.getElementById("auth-submit").textContent =
       authMode === "register" ? "Đăng ký & xem kết quả" : "Đăng nhập";
+    document.getElementById("auth-error").textContent = "";
+    document.getElementById("forgot-success").textContent = "";
+    document.getElementById("forgot-error").textContent = "";
+    toggleAuthFields();
     authModal?.classList.add("active");
     authModal?.setAttribute("aria-hidden", "false");
   }
@@ -413,6 +429,7 @@ function initAuthUI() {
   function closeAuth() {
     authModal?.classList.remove("active");
     authModal?.setAttribute("aria-hidden", "true");
+    showPanel("register");
   }
 
   document.querySelectorAll(".open-auth").forEach((btn) => {
@@ -423,17 +440,24 @@ function initAuthUI() {
     if (e.target.id === "auth-modal") closeAuth();
   });
 
+  if (new URLSearchParams(window.location.search).get("login") === "1") {
+    openAuth("login");
+  }
+
   function toggleAuthFields() {
-    const showProfile = authMode === "register";
-    document.getElementById("auth-name").closest("label").style.display = showProfile ? "" : "none";
-    document.getElementById("auth-phone").closest("label").style.display = showProfile ? "" : "none";
-    document.getElementById("auth-name").required = showProfile;
-    document.getElementById("auth-phone").required = showProfile;
+    const isRegister = authMode === "register";
+    document.getElementById("auth-name").closest("label").style.display = isRegister ? "" : "none";
+    document.getElementById("auth-phone").closest("label").style.display = isRegister ? "" : "none";
+    document.getElementById("auth-name").required = isRegister;
+    document.getElementById("auth-phone").required = isRegister;
+    document.getElementById("auth-forgot-wrap").hidden = isRegister;
+    document.getElementById("auth-password").autocomplete = isRegister ? "new-password" : "current-password";
   }
 
   authTabs.forEach((tab) => {
     tab.addEventListener("click", () => {
       authMode = tab.dataset.mode;
+      showPanel("register");
       authTabs.forEach((t) => t.classList.toggle("active", t === tab));
       document.getElementById("auth-submit").textContent =
         authMode === "register" ? "Đăng ký & xem kết quả" : "Đăng nhập";
@@ -441,6 +465,43 @@ function initAuthUI() {
     });
   });
   toggleAuthFields();
+
+  document.getElementById("btn-forgot-open")?.addEventListener("click", () => {
+    const email = document.getElementById("auth-email").value;
+    if (email) document.getElementById("forgot-email").value = email;
+    showPanel("forgot");
+  });
+
+  document.querySelectorAll(".auth-back-login").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      showPanel("register");
+      authMode = "login";
+      authTabs.forEach((t) => t.classList.toggle("active", t.dataset.mode === "login"));
+      toggleAuthFields();
+    });
+  });
+
+  document.getElementById("forgot-form")?.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const errEl = document.getElementById("forgot-error");
+    const okEl = document.getElementById("forgot-success");
+    const btn = document.getElementById("forgot-submit");
+    errEl.textContent = "";
+    okEl.textContent = "";
+    btn.disabled = true;
+    btn.textContent = "Đang gửi...";
+    try {
+      const res = await Auth.forgotPassword({
+        email: document.getElementById("forgot-email").value,
+      });
+      okEl.textContent = res.message || "Đã gửi email. Kiểm tra hộp thư (và spam).";
+    } catch (err) {
+      errEl.textContent = err.message || "Không gửi được email";
+    } finally {
+      btn.disabled = false;
+      btn.textContent = "Gửi link đặt lại mật khẩu";
+    }
+  });
 
   authForm?.addEventListener("submit", async (e) => {
     e.preventDefault();
@@ -478,10 +539,15 @@ function initAuthUI() {
       window.location.href = "dashboard.html";
     } catch (err) {
       const msg = err.message || "Có lỗi xảy ra";
-      errEl.textContent =
-        msg.includes("fetch") || msg.includes("Failed") || msg.includes("Load failed")
-          ? "Không kết nối được máy chủ. Đợi 30–60 giây (API đang khởi động) rồi thử lại."
-          : msg;
+      if (authMode === "login" && msg.includes("không đúng")) {
+        errEl.innerHTML =
+          `${msg}<br><small>Nếu bạn đăng ký trước khi hệ thống sửa lỗi, hãy dùng <strong>Quên mật khẩu</strong> hoặc đăng ký lại bằng email khác.</small>`;
+      } else {
+        errEl.textContent =
+          msg.includes("fetch") || msg.includes("Failed") || msg.includes("Load failed")
+            ? "Không kết nối được máy chủ. Đợi 30–60 giây rồi thử lại."
+            : msg;
+      }
     } finally {
       submitBtn.disabled = false;
       submitBtn.textContent =
@@ -491,10 +557,20 @@ function initAuthUI() {
 
   const user = typeof Auth !== "undefined" ? Auth.getUser() : null;
   const navAccount = document.getElementById("nav-account");
-  if (user && navAccount) {
-    navAccount.innerHTML = `<a href="dashboard.html">Xin chào, ${user.full_name.split(" ")[0]}</a>`;
-    document.querySelector(".header-cta")?.setAttribute("href", "dashboard.html");
-    document.querySelector(".header-cta").textContent = "Khu vực của tôi";
+  const headerLogin = document.getElementById("header-login");
+  if (user) {
+    if (navAccount) {
+      navAccount.innerHTML = `<a href="dashboard.html">Xin chào, ${user.full_name.split(" ")[0]}</a>`;
+    }
+    headerLogin?.setAttribute("hidden", "");
+    const cta = document.querySelector(".header-cta");
+    if (cta) {
+      cta.setAttribute("href", "dashboard.html");
+      cta.textContent = "Khu vực của tôi";
+    }
+  } else if (navAccount) {
+    navAccount.innerHTML = `<button type="button" class="nav-link-btn open-auth" data-mode="login">Đăng nhập</button>`;
+    navAccount.querySelector(".open-auth")?.addEventListener("click", () => openAuth("login"));
   }
 }
 

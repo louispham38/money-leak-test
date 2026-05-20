@@ -47,6 +47,21 @@ cd money-leak-test
 render blueprint launch
 ```
 
+## Cấu hình email (Quên mật khẩu)
+
+Trên Render Dashboard → service `money-leak-test-api` → **Environment**:
+
+| Biến | Ví dụ (Gmail) |
+|------|----------------|
+| `SMTP_HOST` | `smtp.gmail.com` |
+| `SMTP_PORT` | `587` |
+| `SMTP_USER` | `your@gmail.com` |
+| `SMTP_PASSWORD` | App Password 16 ký tự (Google Account → Security → App passwords) |
+| `SMTP_FROM` | `MoneyLeakTest <your@gmail.com>` |
+| `MLT_FRONTEND_URL` | `https://louispham38.github.io/money-leak-test` |
+
+Sau khi lưu, **Redeploy** service. Người dùng có thể dùng **Quên mật khẩu** trên form đăng nhập.
+
 ## Biến môi trường tùy chỉnh
 
 | Biến | Mô tả |
