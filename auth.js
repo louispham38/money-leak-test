@@ -128,6 +128,16 @@ const Auth = (() => {
     return { user: pub, mode: "local" };
   }
 
+  async function trackThuChiOpen() {
+    if (!isLoggedIn() || getToken()?.startsWith("local_")) return;
+    try {
+      await apiFetch("/api/events", {
+        method: "POST",
+        body: JSON.stringify({ event_type: "thu_chi_open" }),
+      });
+    } catch (_) {}
+  }
+
   async function saveTestResult(payload) {
     const user = getUser();
     if (!user) return;
@@ -206,6 +216,7 @@ const Auth = (() => {
     forgotPassword,
     resetPassword,
     saveTestResult,
+    trackThuChiOpen,
     getLatestResult,
     getGoals,
     saveGoals,

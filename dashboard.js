@@ -6,8 +6,10 @@ const READINESS_MSG = {
 
 async function initDashboard() {
   const cfg = window.MLT_CONFIG || {};
-  document.getElementById("thu-chi-link").href =
-    cfg.THU_CHI_URL || "https://thu-chi-web.onrender.com";
+  const thuChiUrl = cfg.THU_CHI_URL || "https://thu-chi-web.onrender.com";
+  const thuChiLink = document.getElementById("thu-chi-link");
+  thuChiLink.href = thuChiUrl;
+  thuChiLink.addEventListener("click", () => Auth.trackThuChiOpen());
 
   if (!Auth.isLoggedIn()) {
     document.getElementById("dash-login-required").hidden = false;

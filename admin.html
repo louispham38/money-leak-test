@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin — MoneyLeakTest</title>
+  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="admin.css" />
+</head>
+<body class="admin-body">
+  <div id="admin-login-screen" class="admin-login-wrap">
+    <div class="admin-login-card">
+      <h1>💧 Admin MoneyLeakTest</h1>
+      <p class="admin-login-sub">Quản trị thành viên, kết quả test và thống kê</p>
+      <form id="admin-login-form" class="auth-form">
+        <label>Tài khoản<input type="text" id="admin-user" required autocomplete="username" value="admin" /></label>
+        <label>Mật khẩu<input type="password" id="admin-pass" required autocomplete="current-password" /></label>
+        <p id="admin-login-error" class="auth-error"></p>
+        <button type="submit" class="btn btn-primary btn-block">Đăng nhập</button>
+      </form>
+      <p class="admin-back"><a href="index.html">← Về trang chủ</a></p>
+    </div>
+  </div>
+
+  <div id="admin-app" hidden>
+    <header class="admin-header">
+      <div class="admin-header-inner container">
+        <a href="index.html" class="logo"><span class="logo-icon">💧</span><span>MLT Admin</span></a>
+        <div class="admin-header-right">
+          <span id="admin-welcome"></span>
+          <button type="button" class="btn btn-ghost btn-sm" id="admin-logout">Đăng xuất</button>
+        </div>
+      </div>
+    </header>
+
+    <main class="container admin-main">
+      <section class="admin-stats" id="admin-stats"></section>
+
+      <section class="admin-panel">
+        <div class="admin-panel-head">
+          <h2>Thành viên đăng ký</h2>
+          <input type="search" id="user-search" placeholder="Tìm tên, email, SĐT..." class="admin-search" />
+        </div>
+        <div class="admin-table-wrap">
+          <table class="admin-table" id="users-table">
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Họ tên</th>
+                <th>Email</th>
+                <th>SĐT</th>
+                <th>Điểm rò rỉ</th>
+                <th>Làm test</th>
+                <th>Thu-Chi</th>
+                <th>Đăng ký</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody id="users-tbody"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <section class="admin-detail" id="user-detail" hidden>
+        <div class="admin-detail-head">
+          <h2 id="detail-title">Chi tiết thành viên</h2>
+          <button type="button" class="btn btn-ghost btn-sm" id="detail-close">Đóng</button>
+        </div>
+        <div id="detail-meta" class="admin-detail-meta"></div>
+        <div id="detail-results"></div>
+      </section>
+    </main>
+  </div>
+
+  <script src="config.js"></script>
+  <script src="admin.js"></script>
+</body>
+</html>

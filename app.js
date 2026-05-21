@@ -201,6 +201,7 @@ const PLANS = {
 
 let currentQuestion = 0;
 const leakScores = { cost: 0, subscription: 0, shopping: 0, debt: 0, daily: 0, investment: 0, social: 0, status: 0 };
+const quizAnswers = [];
 
 function renderStatic() {
   document.getElementById("leak-grid").innerHTML = LEAKS.map(
@@ -265,6 +266,7 @@ function resetQuiz() {
   currentQuestion = 0;
   lastReadiness = null;
   Object.keys(leakScores).forEach((k) => { leakScores[k] = 0; });
+  quizAnswers.length = 0;
   document.getElementById("quiz-view").hidden = false;
   document.getElementById("results-view").hidden = true;
   document.getElementById("auth-gate")?.setAttribute("hidden", "");
@@ -298,6 +300,14 @@ function renderQuestion() {
 function selectAnswer(index) {
   const q = QUESTIONS[currentQuestion];
   const opt = q.options[index];
+  quizAnswers.push({
+    q: currentQuestion,
+    question: q.text,
+    answer_index: index,
+    answer_label: opt.label,
+    scores: opt.scores || {},
+    readiness: opt.readiness || null,
+  });
   Object.entries(opt.scores || {}).forEach(([key, val]) => {
     leakScores[key] = (leakScores[key] || 0) + val;
   });
@@ -339,6 +349,7 @@ function buildResultPayload() {
     plan_steps: planSteps,
     leak_scores: { ...leakScores },
     readiness: lastReadiness,
+    answers: [...quizAnswers],
   };
 }
 
@@ -388,6 +399,7 @@ function showResults() {
       plan_steps: payload.plan_steps,
       leak_scores: payload.leak_scores,
       readiness: payload.readiness,
+      answers: payload.answers,
     });
   } else {
     authGate?.removeAttribute("hidden");
@@ -533,6 +545,7 @@ function initAuthUI() {
           plan_steps: p.plan_steps,
           leak_scores: p.leak_scores,
           readiness: p.readiness,
+          answers: p.answers || [],
         });
       }
       closeAuth();

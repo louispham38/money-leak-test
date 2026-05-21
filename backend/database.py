@@ -23,6 +23,12 @@ def get_db():
         conn.close()
 
 
+def _ensure_column(conn, table: str, column: str, definition: str):
+    cols = {r[1] for r in conn.execute(f"PRAGMA table_info({table})").fetchall()}
+    if column not in cols:
+        conn.execute(f"ALTER TABLE {table} ADD COLUMN {column} {definition}")
+
+
 def init_db():
     with get_db() as conn:
         conn.executescript(
@@ -69,8 +75,17 @@ def init_db():
                 created_at TEXT NOT NULL,
                 FOREIGN KEY (user_id) REFERENCES users(id)
             );
+            CREATE TABLE IF NOT EXISTS app_events (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                user_id INTEGER NOT NULL,
+                event_type TEXT NOT NULL,
+                created_at TEXT NOT NULL,
+                FOREIGN KEY (user_id) REFERENCES users(id)
+            );
             """
         )
+        _ensure_column(conn, "users", "role", "TEXT DEFAULT 'user'")
+        _ensure_column(conn, "test_results", "answers", "TEXT")
 
 
 def row_to_dict(row: sqlite3.Row | None) -> dict | None:

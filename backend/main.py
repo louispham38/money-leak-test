@@ -9,23 +9,14 @@ from fastapi import Depends, FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from jose import JWTError, jwt
-import bcrypt
 from pydantic import BaseModel, EmailStr, Field
 
+from admin import router as admin_router, seed_admin
+from auth_core import SECRET_KEY, create_token, hash_password, verify_password
 from database import get_db, init_db, row_to_dict, utc_now
 from email_service import send_reset_email, smtp_configured
 
-SECRET_KEY = os.getenv("MLT_SECRET_KEY", "dev-secret-change-in-production-mlt-2026")
 ALGORITHM = "HS256"
-ACCESS_TOKEN_EXPIRE_DAYS = 30
-
-
-def hash_password(password: str) -> str:
-    return bcrypt.hashpw(password.encode("utf-8"), bcrypt.gensalt()).decode("utf-8")
-
-
-def verify_password(password: str, password_hash: str) -> bool:
-    return bcrypt.checkpw(password.encode("utf-8"), password_hash.encode("utf-8"))
 security = HTTPBearer(auto_error=False)
 
 app = FastAPI(title="MoneyLeakTest API", version="1.0.0")
@@ -39,9 +30,13 @@ app.add_middleware(
 )
 
 
+app.include_router(admin_router)
+
+
 @app.on_event("startup")
 def startup():
     init_db()
+    seed_admin()
 
 
 class RegisterBody(BaseModel):
@@ -75,6 +70,11 @@ class TestResultBody(BaseModel):
     plan_steps: list[str]
     leak_scores: dict
     readiness: Optional[str] = None
+    answers: Optional[list] = None
+
+
+class EventBody(BaseModel):
+    event_type: str = Field(pattern="^(thu_chi_open)$")
 
 
 class GoalsBody(BaseModel):
@@ -83,11 +83,6 @@ class GoalsBody(BaseModel):
     emergency_fund: Optional[float] = None
     debt_payoff: Optional[float] = None
     goal_note: Optional[str] = None
-
-
-def create_token(user_id: int, email: str) -> str:
-    payload = {"sub": str(user_id), "email": email}
-    return jwt.encode(payload, SECRET_KEY, algorithm=ALGORITHM)
 
 
 def get_current_user(
@@ -123,6 +118,8 @@ def register(body: RegisterBody):
         exists = conn.execute("SELECT id FROM users WHERE email = ?", (body.email.lower(),)).fetchone()
         if exists:
             raise HTTPException(400, "Email đã được đăng ký")
+        if body.email.lower() == "admin@mlt.internal":
+            raise HTTPException(400, "Email này không dùng để đăng ký")
         cur = conn.execute(
             "INSERT INTO users (email, full_name, phone, password_hash, created_at) VALUES (?, ?, ?, ?, ?)",
             (body.email.lower(), body.full_name.strip(), body.phone.strip(), password_hash, utc_now()),
@@ -248,8 +245,8 @@ def save_test_result(body: TestResultBody, user: dict = Depends(get_current_user
         cur = conn.execute(
             """
             INSERT INTO test_results
-            (user_id, score, level_key, level_label, top_leaks, plan_title, plan_intro, plan_steps, leak_scores, readiness, created_at)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            (user_id, score, level_key, level_label, top_leaks, plan_title, plan_intro, plan_steps, leak_scores, readiness, answers, created_at)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
             """,
             (
                 user["id"],
@@ -262,6 +259,7 @@ def save_test_result(body: TestResultBody, user: dict = Depends(get_current_user
                 json.dumps(body.plan_steps, ensure_ascii=False),
                 json.dumps(body.leak_scores, ensure_ascii=False),
                 body.readiness,
+                json.dumps(body.answers or [], ensure_ascii=False),
                 utc_now(),
             ),
         )
@@ -284,7 +282,21 @@ def latest_test_result(user: dict = Depends(get_current_user)):
     data["top_leaks"] = json.loads(data["top_leaks"])
     data["plan_steps"] = json.loads(data["plan_steps"])
     data["leak_scores"] = json.loads(data["leak_scores"])
+    if data.get("answers"):
+        data["answers"] = json.loads(data["answers"])
+    else:
+        data["answers"] = []
     return data
+
+
+@app.post("/api/events")
+def track_event(body: EventBody, user: dict = Depends(get_current_user)):
+    with get_db() as conn:
+        conn.execute(
+            "INSERT INTO app_events (user_id, event_type, created_at) VALUES (?, ?, ?)",
+            (user["id"], body.event_type, utc_now()),
+        )
+    return {"ok": True}
 
 
 @app.get("/api/goals")

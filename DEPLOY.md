@@ -47,6 +47,12 @@ cd money-leak-test
 render blueprint launch
 ```
 
+## Admin dashboard
+
+- URL: `https://louispham38.github.io/money-leak-test/admin.html`
+- Đăng nhập: tài khoản `admin`, mật khẩu `pAss123` (đổi qua biến `MLT_ADMIN_PASSWORD` trên Render)
+- Xem thành viên, điểm rò rỉ, câu trả lời từng user, thống kê test & Thu-Chi
+
 ## Cấu hình email (Quên mật khẩu)
 
 Trên Render Dashboard → service `money-leak-test-api` → **Environment**:
