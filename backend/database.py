@@ -75,6 +75,18 @@ def init_db():
                 created_at TEXT NOT NULL,
                 FOREIGN KEY (user_id) REFERENCES users(id)
             );
+            CREATE TABLE IF NOT EXISTS goal_progress (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                user_id INTEGER NOT NULL,
+                period_label TEXT NOT NULL,
+                actual_savings REAL,
+                actual_emergency REAL,
+                actual_debt_paid REAL,
+                actual_income REAL,
+                note TEXT,
+                created_at TEXT NOT NULL,
+                FOREIGN KEY (user_id) REFERENCES users(id)
+            );
             CREATE TABLE IF NOT EXISTS app_events (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 user_id INTEGER NOT NULL,

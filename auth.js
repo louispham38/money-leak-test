@@ -190,6 +190,57 @@ const Auth = (() => {
     return all[user.id];
   }
 
+  const PROGRESS_KEY = "mlt_local_goal_progress";
+
+  async function listGoalProgress() {
+    const user = getUser();
+    if (!user) return [];
+    try {
+      if (!getToken()?.startsWith("local_")) {
+        return await apiFetch("/api/goals/progress");
+      }
+    } catch (_) {}
+    const all = JSON.parse(localStorage.getItem(PROGRESS_KEY) || "{}");
+    return all[user.id] || [];
+  }
+
+  async function addGoalProgress(entry) {
+    const user = getUser();
+    if (!user) throw new Error("Chưa đăng nhập");
+    try {
+      if (!getToken()?.startsWith("local_")) {
+        return await apiFetch("/api/goals/progress", {
+          method: "POST",
+          body: JSON.stringify(entry),
+        });
+      }
+    } catch (err) {
+      if (!String(err.message).match(/fetch|Failed|Load failed/)) throw err;
+    }
+    const all = JSON.parse(localStorage.getItem(PROGRESS_KEY) || "{}");
+    const list = all[user.id] || [];
+    const existingIdx = list.findIndex((e) => e.period_label === entry.period_label);
+    const record = { ...entry, id: Date.now(), created_at: new Date().toISOString() };
+    if (existingIdx >= 0) list[existingIdx] = { ...list[existingIdx], ...record };
+    else list.unshift(record);
+    all[user.id] = list;
+    localStorage.setItem(PROGRESS_KEY, JSON.stringify(all));
+    return record;
+  }
+
+  async function deleteGoalProgress(id) {
+    const user = getUser();
+    if (!user) return;
+    try {
+      if (!getToken()?.startsWith("local_")) {
+        return await apiFetch(`/api/goals/progress/${id}`, { method: "DELETE" });
+      }
+    } catch (_) {}
+    const all = JSON.parse(localStorage.getItem(PROGRESS_KEY) || "{}");
+    all[user.id] = (all[user.id] || []).filter((e) => e.id !== id);
+    localStorage.setItem(PROGRESS_KEY, JSON.stringify(all));
+  }
+
   async function forgotPassword({ email }) {
     return apiFetch("/api/auth/forgot-password", {
       method: "POST",
@@ -220,5 +271,8 @@ const Auth = (() => {
     getLatestResult,
     getGoals,
     saveGoals,
+    listGoalProgress,
+    addGoalProgress,
+    deleteGoalProgress,
   };
 })();

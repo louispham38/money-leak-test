@@ -77,6 +77,15 @@ class EventBody(BaseModel):
     event_type: str = Field(pattern="^(thu_chi_open)$")
 
 
+class GoalProgressBody(BaseModel):
+    period_label: str = Field(min_length=1, max_length=32)
+    actual_savings: Optional[float] = None
+    actual_emergency: Optional[float] = None
+    actual_debt_paid: Optional[float] = None
+    actual_income: Optional[float] = None
+    note: Optional[str] = None
+
+
 class GoalsBody(BaseModel):
     monthly_income: Optional[float] = None
     savings_target: Optional[float] = None
@@ -307,6 +316,78 @@ def get_goals(user: dict = Depends(get_current_user)):
             (user["id"],),
         ).fetchone()
     return row_to_dict(row)
+
+
+@app.get("/api/goals/progress")
+def list_goal_progress(user: dict = Depends(get_current_user)):
+    with get_db() as conn:
+        rows = conn.execute(
+            "SELECT * FROM goal_progress WHERE user_id = ? ORDER BY period_label DESC, id DESC",
+            (user["id"],),
+        ).fetchall()
+    return [row_to_dict(r) for r in rows]
+
+
+@app.post("/api/goals/progress")
+def add_goal_progress(body: GoalProgressBody, user: dict = Depends(get_current_user)):
+    with get_db() as conn:
+        existing = conn.execute(
+            "SELECT id FROM goal_progress WHERE user_id = ? AND period_label = ?",
+            (user["id"], body.period_label),
+        ).fetchone()
+        if existing:
+            conn.execute(
+                """
+                UPDATE goal_progress SET
+                actual_savings = ?, actual_emergency = ?, actual_debt_paid = ?,
+                actual_income = ?, note = ?, created_at = ?
+                WHERE id = ?
+                """,
+                (
+                    body.actual_savings,
+                    body.actual_emergency,
+                    body.actual_debt_paid,
+                    body.actual_income,
+                    body.note,
+                    utc_now(),
+                    existing["id"],
+                ),
+            )
+            row_id = existing["id"]
+        else:
+            cur = conn.execute(
+                """
+                INSERT INTO goal_progress
+                (user_id, period_label, actual_savings, actual_emergency, actual_debt_paid, actual_income, note, created_at)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?)
+                """,
+                (
+                    user["id"],
+                    body.period_label,
+                    body.actual_savings,
+                    body.actual_emergency,
+                    body.actual_debt_paid,
+                    body.actual_income,
+                    body.note,
+                    utc_now(),
+                ),
+            )
+            row_id = cur.lastrowid
+        row = conn.execute("SELECT * FROM goal_progress WHERE id = ?", (row_id,)).fetchone()
+    return row_to_dict(row)
+
+
+@app.delete("/api/goals/progress/{progress_id}")
+def delete_goal_progress(progress_id: int, user: dict = Depends(get_current_user)):
+    with get_db() as conn:
+        row = conn.execute(
+            "SELECT id FROM goal_progress WHERE id = ? AND user_id = ?",
+            (progress_id, user["id"]),
+        ).fetchone()
+        if not row:
+            raise HTTPException(404, "Không tìm thấy bản ghi tiến độ")
+        conn.execute("DELETE FROM goal_progress WHERE id = ?", (progress_id,))
+    return {"ok": True}
 
 
 @app.put("/api/goals")

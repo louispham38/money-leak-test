@@ -49,16 +49,77 @@
       </section>
 
       <section class="dash-card" id="card-goals">
-        <h2>Mục tiêu tài chính</h2>
-        <form id="goals-form" class="goals-form">
+        <div class="card-head-row">
+          <h2>Mục tiêu tài chính</h2>
+          <button type="button" class="btn-link" id="btn-edit-goals" hidden>Chỉnh sửa</button>
+        </div>
+        <div id="goals-summary" hidden>
+          <p id="goals-note-display" class="goal-note-display"></p>
+          <div class="goal-summary-grid">
+            <div class="goal-tile">
+              <span class="goal-tile-label">Thu nhập / tháng</span>
+              <span class="goal-tile-value" id="sum-income">—</span>
+            </div>
+            <div class="goal-tile">
+              <span class="goal-tile-label">Tiết kiệm / tháng</span>
+              <span class="goal-tile-value" id="sum-savings">—</span>
+            </div>
+            <div class="goal-tile">
+              <span class="goal-tile-label">Quỹ khẩn cấp</span>
+              <span class="goal-tile-value" id="sum-emergency">—</span>
+            </div>
+            <div class="goal-tile">
+              <span class="goal-tile-label">Trả nợ</span>
+              <span class="goal-tile-value" id="sum-debt">—</span>
+            </div>
+          </div>
+        </div>
+        <form id="goals-form" class="goals-form" hidden>
           <label>Thu nhập hàng tháng (VNĐ)<input type="number" id="goal-income" min="0" step="100000" placeholder="15000000" /></label>
           <label>Mục tiêu tiết kiệm / tháng (VNĐ)<input type="number" id="goal-savings" min="0" step="100000" placeholder="3000000" /></label>
           <label>Quỹ khẩn cấp mục tiêu (VNĐ)<input type="number" id="goal-emergency" min="0" step="1000000" placeholder="30000000" /></label>
           <label>Mục tiêu trả nợ (VNĐ)<input type="number" id="goal-debt" min="0" step="100000" placeholder="0" /></label>
           <label>Ghi chú mục tiêu<textarea id="goal-note" rows="3" placeholder="VD: Tiết kiệm 50tr để mua xe trong 2 năm..."></textarea></label>
-          <button type="submit" class="btn btn-primary btn-block">Lưu mục tiêu</button>
+          <div class="form-row">
+            <button type="submit" class="btn btn-primary btn-block">Lưu mục tiêu</button>
+            <button type="button" class="btn btn-ghost btn-block" id="btn-cancel-goals" hidden>Huỷ</button>
+          </div>
           <p id="goals-msg" class="form-msg"></p>
         </form>
+      </section>
+
+      <section class="dash-card dash-card-wide" id="card-progress" hidden>
+        <div class="card-head-row">
+          <h2>Tiến độ thực tế</h2>
+          <button type="button" class="btn btn-primary btn-sm" id="btn-add-progress">+ Cập nhật tháng này</button>
+        </div>
+        <p class="hint">Mỗi tháng cập nhật xem bạn đã tiết kiệm/trả nợ/tích quỹ khẩn cấp bao nhiêu. Hệ thống sẽ tự tính % so với mục tiêu.</p>
+
+        <div id="progress-overall" class="progress-overall" hidden></div>
+
+        <form id="progress-form" class="progress-form" hidden>
+          <h3>Cập nhật tiến độ tháng</h3>
+          <div class="form-grid">
+            <label>Tháng (YYYY-MM)<input type="month" id="prog-period" required /></label>
+            <label>Thu nhập thực tế (VNĐ)<input type="number" id="prog-income" min="0" step="100000" placeholder="0" /></label>
+            <label>Đã tiết kiệm (VNĐ)<input type="number" id="prog-savings" min="0" step="100000" placeholder="0" /></label>
+            <label>Quỹ khẩn cấp hiện có (VNĐ)<input type="number" id="prog-emergency" min="0" step="100000" placeholder="0" /></label>
+            <label>Đã trả nợ (VNĐ)<input type="number" id="prog-debt" min="0" step="100000" placeholder="0" /></label>
+          </div>
+          <label>Ghi chú<textarea id="prog-note" rows="2" placeholder="VD: Tháng này cắt được subscription Netflix..."></textarea></label>
+          <p class="hint">Tip: Quỹ khẩn cấp & "Đã tiết kiệm" có thể nhập <strong>số dư tích lũy hiện tại</strong>; "Đã trả nợ" tính cộng dồn từ khi đặt mục tiêu.</p>
+          <div class="form-row">
+            <button type="submit" class="btn btn-primary">Lưu tiến độ</button>
+            <button type="button" class="btn btn-ghost" id="btn-cancel-progress">Huỷ</button>
+          </div>
+          <p id="progress-msg" class="form-msg"></p>
+        </form>
+
+        <div id="progress-empty" class="empty-state" hidden>
+          <p>Chưa có bản ghi tiến độ nào. Nhấn <strong>"Cập nhật tháng này"</strong> để bắt đầu theo dõi.</p>
+        </div>
+
+        <div id="progress-history"></div>
       </section>
 
       <section class="dash-card dash-card-app">
