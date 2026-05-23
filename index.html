@@ -13,7 +13,7 @@
 <body>
   <div class="top-bar">
     <span>Mỗi ngày không biết = thêm tiền bị "bốc hơi"</span>
-    <a href="#test" class="top-bar-link">Làm bài test miễn phí ngay →</a>
+    <a href="#test" class="top-bar-link">👉 Bấm vào đây — Làm bài test miễn phí ngay →</a>
   </div>
 
   <header class="header" id="top">
@@ -30,7 +30,11 @@
       </nav>
       <div class="header-actions">
         <button type="button" class="btn btn-ghost btn-sm open-auth" data-mode="login" id="header-login">Đăng nhập</button>
-        <a href="#test" class="btn btn-primary btn-sm header-cta">Làm Bài Test — Miễn Phí</a>
+        <a href="#test" class="btn btn-cta-test btn-cta-sm header-cta">
+          <span class="btn-cta-content">
+            <span class="btn-cta-action">👉 Bấm vào đây — Test miễn phí</span>
+          </span>
+        </a>
       </div>
       <button class="menu-toggle" aria-label="Mở menu" aria-expanded="false">
         <span></span><span></span><span></span>
@@ -55,7 +59,14 @@
             Bài test <strong>3 phút này</strong> sẽ chỉ ra chính xác lỗ hổng nào đang hút cạn tài khoản —
             và cách bịt lại <em>trước khi mọi thứ trở nên tàn khốc hơn.</em>
           </p>
-          <a href="#test" class="btn btn-primary btn-lg hero-cta">🔍 Làm Bài Test Ngay — Hoàn Toàn Miễn Phí</a>
+          <div class="hero-cta-wrap">
+            <button type="button" class="btn btn-cta-test btn-cta-xl open-test">
+              <span class="btn-cta-content">
+                <span class="btn-cta-action">👉 Bấm vào đây — Làm bài test ngay!</span>
+                <span class="btn-cta-sub">Hoàn toàn miễn phí · 3 phút · Không cần thẻ</span>
+              </span>
+            </button>
+          </div>
           <div class="trust-badges">
             <span>⭐⭐⭐⭐⭐ 4.9/5</span>
             <span>✅ <strong>8,400+</strong> người đã làm</span>
@@ -78,7 +89,7 @@
                   <span>0</span><span>???</span><span>100</span>
                 </div>
               </div>
-              <p class="leak-card-hint">Làm bài test để biết con số của bạn</p>
+              <button type="button" class="leak-card-cta open-test">👉 Bấm vào đây — Biết con số của bạn</button>
             </div>
           </div>
         </div>
@@ -98,7 +109,12 @@
           <h3>Bạn đang mất bao nhiêu mỗi tháng?</h3>
           <p>Trung bình người Việt rò rỉ <strong>5–15 triệu VNĐ/tháng</strong> mà không nhận ra.<br />
           Bài test sẽ cho bạn con số chính xác của <em>bản thân</em>.</p>
-          <a href="#test" class="btn btn-primary">Tìm Con Số Của Bạn →</a>
+          <button type="button" class="btn btn-cta-test btn-cta-lg open-test">
+            <span class="btn-cta-content">
+              <span class="btn-cta-action">👉 Bấm vào đây — Tìm con số của bạn</span>
+              <span class="btn-cta-sub">Miễn phí · Kết quả tức thì</span>
+            </span>
+          </button>
         </div>
       </div>
     </section>
@@ -138,7 +154,11 @@
             </div>
             <span class="score-unknown" id="preview-score">???</span>
           </div>
-          <p class="score-hint">— Làm bài test để biết</p>
+          <button type="button" class="btn btn-cta-test btn-cta-md open-test score-cta">
+            <span class="btn-cta-content">
+              <span class="btn-cta-action">👉 Bấm vào đây — Làm bài test để biết</span>
+            </span>
+          </button>
           <p class="score-distribution">Kết quả của người khác: Thấp (5%) · Trung bình (45%) · Cao (35%) · Rất cao (15%)</p>
         </div>
       </div>
@@ -170,7 +190,12 @@
           <span class="test-card-icon">🔍</span>
           <h3>Bắt Đầu Bài Test Của Bạn</h3>
           <p>17 câu hỏi · 5–7 phút · Kết quả + lộ trình hành động</p>
-          <button type="button" class="btn btn-primary btn-lg open-test">🚀 Làm Bài Test Ngay — Miễn Phí</button>
+          <button type="button" class="btn btn-cta-test btn-cta-xl open-test">
+            <span class="btn-cta-content">
+              <span class="btn-cta-action">👉 Bấm vào đây — Làm bài test ngay!</span>
+              <span class="btn-cta-sub">Miễn phí 100% · 17 câu + kết quả cá nhân</span>
+            </span>
+          </button>
           <div class="test-features">
             <span>🔒 Không cần tài khoản</span>
             <span>📧 Không spam email</span>
@@ -227,7 +252,12 @@
     <section class="final-cta">
       <div class="container">
         <h2>Đừng Để Tiền Tiếp Tục Rò Rỉ Thêm Một Ngày Nào Nữa</h2>
-        <button type="button" class="btn btn-primary btn-lg open-test">Làm Bài Test Ngay — Miễn Phí 100%</button>
+        <button type="button" class="btn btn-cta-test btn-cta-xl open-test">
+          <span class="btn-cta-content">
+            <span class="btn-cta-action">👉 Bấm vào đây — Làm bài test ngay!</span>
+            <span class="btn-cta-sub">Hoàn toàn miễn phí · Bắt đầu trong 3 phút</span>
+          </span>
+        </button>
       </div>
     </section>
   </main>
