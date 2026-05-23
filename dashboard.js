@@ -176,7 +176,7 @@ function fillProgressFormForPeriod(period) {
 
 async function initDashboard() {
   const cfg = window.MLT_CONFIG || {};
-  const thuChiUrl = cfg.THU_CHI_URL || "https://thu-chi-web.onrender.com";
+  const thuChiUrl = cfg.THU_CHI_URL || "https://thu-chi-web.fly.dev/";
   const thuChiLink = document.getElementById("thu-chi-link");
   thuChiLink.href = thuChiUrl;
   thuChiLink.addEventListener("click", () => Auth.trackThuChiOpen());
