@@ -15,7 +15,8 @@ const QUESTIONS = [
     options: [
       { label: "Âm", scores: { cost: 8 } },
       { label: "Bằng 0", scores: { cost: 4 } },
-      { label: "Dương", scores: {} },
+      { label: "Dương (nhưng chưa thoả mãn)", scores: { cost: 2 } },
+      { label: "Dương (thoả mãn)", scores: {} },
     ],
   },
   {
