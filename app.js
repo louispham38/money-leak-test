@@ -16,13 +16,17 @@ const TESTIMONIALS = [
 
 const FAQ = [
   { q: "Bài test này có mất phí không?", a: "<strong>Hoàn toàn miễn phí 100%.</strong> Không cần thẻ tín dụng, không cần tài khoản. Bạn chỉ cần làm bài test và nhận kết quả ngay lập tức — không có bước nào yêu cầu thanh toán.", open: true },
-  { q: "Bài test mất bao lâu?", a: "<strong>Khoảng 5–7 phút.</strong> Chỉ có 20 câu hỏi ngắn, lựa chọn nhanh. Bạn không cần chuẩn bị hay tra cứu gì — chỉ cần trả lời theo cảm nhận thực tế của mình." },
+  { q: "Bài test mất bao lâu?", a: "<strong>Khoảng 5–7 phút.</strong> 17 câu chấm điểm rò rỉ + 3 câu ngắn chốt hành động sau khi xem kết quả. Trả lời theo cảm nhận thực tế của bạn." },
   { q: "Kết quả có chính xác không?", a: "Kết quả chính xác đến mức bạn trả lời thành thật. Bài test được thiết kế dựa trên <strong>các mẫu chi tiêu phổ biến</strong> của người Việt và tâm lý học hành vi tài chính. Trả lời càng thật → insight càng có giá trị." },
   { q: "Tôi có cần đăng ký tài khoản không?", a: "Bạn có thể làm bài test miễn phí ngay. <strong>Đăng ký tài khoản</strong> (email, họ tên, SĐT) để lưu kết quả, xem plan hành động đầy đủ và truy cập khu vực cá nhân." },
   { q: "Sau khi đăng ký tôi sẽ nhận được gì?", a: "Kết quả bài test, plan hành động theo mức rò rỉ, mục tiêu tài chính, giới thiệu app Thu-Chi, nhóm Zalo — và sớm có workshop, coaching 1-1." },
 ];
 
 let lastReadiness = null;
+let followupIndex = 0;
+let followupAnswers = [];
+let pendingResultPayload = null;
+let commitmentLevel = "light";
 
 const LEAK_LABELS = {
   cost: "Chi phí cố định & dòng tiền",
@@ -264,13 +268,22 @@ function closeModal() {
 
 function resetQuiz() {
   currentQuestion = 0;
+  followupIndex = 0;
   lastReadiness = null;
+  commitmentLevel = "light";
+  pendingResultPayload = null;
+  followupAnswers = [];
   Object.keys(leakScores).forEach((k) => { leakScores[k] = 0; });
   quizAnswers.length = 0;
   document.getElementById("quiz-view").hidden = false;
   document.getElementById("results-view").hidden = true;
+  document.getElementById("followup-view").hidden = true;
+  document.getElementById("results-bridge").hidden = true;
+  document.getElementById("commitment-cta").hidden = true;
+  document.getElementById("cta-serious").hidden = true;
+  document.getElementById("cta-light").hidden = true;
   document.getElementById("auth-gate")?.setAttribute("hidden", "");
-  document.getElementById("results-full")?.removeAttribute("hidden");
+  document.getElementById("results-full")?.setAttribute("hidden", "");
   renderQuestion();
 }
 
@@ -317,8 +330,131 @@ function selectAnswer(index) {
   if (currentQuestion < QUESTIONS.length) {
     renderQuestion();
   } else {
-    showResults();
+    showResultsPreview();
   }
+}
+
+function renderFollowupQuestion() {
+  const list = typeof FOLLOWUP_QUESTIONS !== "undefined" ? FOLLOWUP_QUESTIONS : [];
+  const q = list[followupIndex];
+  if (!q) return;
+
+  const total = list.length;
+  const pct = ((followupIndex + 1) / total) * 100;
+  document.getElementById("followup-progress-bar").style.setProperty("--progress", `${pct}%`);
+  document.getElementById("followup-progress-text").textContent = `Câu ${followupIndex + 1} / ${total}`;
+  document.getElementById("followup-question").textContent = q.text;
+
+  const optionsEl = document.getElementById("followup-options");
+  optionsEl.innerHTML = q.options
+    .map((opt, i) => `<button type="button" class="quiz-option" data-index="${i}">${opt.label}</button>`)
+    .join("");
+
+  optionsEl.querySelectorAll(".quiz-option").forEach((btn) => {
+    btn.addEventListener("click", () => selectFollowupAnswer(parseInt(btn.dataset.index, 10)));
+  });
+}
+
+function selectFollowupAnswer(index) {
+  const list = typeof FOLLOWUP_QUESTIONS !== "undefined" ? FOLLOWUP_QUESTIONS : [];
+  const q = list[followupIndex];
+  const opt = q.options[index];
+
+  followupAnswers.push({
+    q: followupIndex,
+    question: q.text,
+    answer_index: index,
+    answer_label: opt.label,
+    meta: q.meta,
+    readiness: opt.readiness || null,
+    commitment: opt.commitment || null,
+  });
+
+  if (q.meta === "commitment") {
+    lastReadiness = opt.readiness || lastReadiness;
+    commitmentLevel = opt.commitment || "light";
+  }
+
+  followupIndex++;
+  if (followupIndex < list.length) {
+    renderFollowupQuestion();
+  } else {
+    finalizeAfterFollowup();
+  }
+}
+
+function computeCommitment() {
+  const commitAns = followupAnswers.find((a) => a.meta === "commitment");
+  if (commitAns?.commitment === "serious") return "serious";
+  return "light";
+}
+
+function showResultsPreview() {
+  pendingResultPayload = buildResultPayload();
+  sessionStorage.setItem("mlt_pending_result", JSON.stringify(pendingResultPayload));
+
+  document.getElementById("quiz-view").hidden = true;
+  document.getElementById("results-view").hidden = false;
+  document.getElementById("results-bridge").hidden = false;
+  document.getElementById("followup-view").hidden = false;
+  document.getElementById("commitment-cta").hidden = true;
+  document.getElementById("auth-gate")?.setAttribute("hidden", "");
+  document.getElementById("results-full")?.setAttribute("hidden", "");
+
+  renderResultUI(pendingResultPayload);
+
+  followupIndex = 0;
+  followupAnswers = [];
+  renderFollowupQuestion();
+}
+
+function finalizeAfterFollowup() {
+  commitmentLevel = computeCommitment();
+  pendingResultPayload = {
+    ...pendingResultPayload,
+    followup_answers: [...followupAnswers],
+    commitment: commitmentLevel,
+    readiness: lastReadiness,
+    answers: [...quizAnswers, ...followupAnswers.map((a, i) => ({ ...a, q: QUESTIONS.length + i }))],
+  };
+  sessionStorage.setItem("mlt_pending_result", JSON.stringify(pendingResultPayload));
+
+  document.getElementById("followup-view").hidden = true;
+  document.getElementById("results-bridge").hidden = true;
+  document.getElementById("commitment-cta").hidden = false;
+  document.getElementById("cta-serious").hidden = commitmentLevel !== "serious";
+  document.getElementById("cta-light").hidden = commitmentLevel !== "light";
+
+  if (typeof Auth !== "undefined" && Auth.isLoggedIn()) {
+    revealFullResults();
+    savePendingResult();
+  } else if (commitmentLevel === "serious") {
+    document.getElementById("auth-gate")?.removeAttribute("hidden");
+    document.getElementById("auth-gate").querySelector("p").innerHTML =
+      "Bạn đã sẵn sàng hành động! <strong>Đăng ký miễn phí</strong> để lưu kết quả, xem plan chi tiết và vào khu vực cá nhân.";
+  }
+}
+
+function revealFullResults() {
+  document.getElementById("auth-gate")?.setAttribute("hidden", "");
+  document.getElementById("results-full")?.removeAttribute("hidden");
+}
+
+function savePendingResult() {
+  if (!pendingResultPayload || typeof Auth === "undefined" || !Auth.isLoggedIn()) return;
+  const p = pendingResultPayload;
+  Auth.saveTestResult({
+    score: p.score,
+    level_key: p.level_key,
+    level_label: p.level_label,
+    top_leaks: p.top_leaks,
+    plan_title: p.plan_title,
+    plan_intro: p.plan_intro,
+    plan_steps: p.plan_steps,
+    leak_scores: p.leak_scores,
+    readiness: p.readiness,
+    answers: p.answers,
+  });
 }
 
 function buildResultPayload() {
@@ -374,38 +510,6 @@ function renderResultUI(payload) {
   document.getElementById("score-status").style.color = payload.level_color;
 }
 
-function showResults() {
-  const payload = buildResultPayload();
-  sessionStorage.setItem("mlt_pending_result", JSON.stringify(payload));
-
-  document.getElementById("quiz-view").hidden = true;
-  document.getElementById("results-view").hidden = false;
-
-  renderResultUI(payload);
-
-  const authGate = document.getElementById("auth-gate");
-  const resultsFull = document.getElementById("results-full");
-
-  if (typeof Auth !== "undefined" && Auth.isLoggedIn()) {
-    authGate?.setAttribute("hidden", "");
-    resultsFull?.removeAttribute("hidden");
-    Auth.saveTestResult({
-      score: payload.score,
-      level_key: payload.level_key,
-      level_label: payload.level_label,
-      top_leaks: payload.top_leaks,
-      plan_title: payload.plan_title,
-      plan_intro: payload.plan_intro,
-      plan_steps: payload.plan_steps,
-      leak_scores: payload.leak_scores,
-      readiness: payload.readiness,
-      answers: payload.answers,
-    });
-  } else {
-    authGate?.removeAttribute("hidden");
-    resultsFull?.setAttribute("hidden", "");
-  }
-}
 
 function initAuthUI() {
   const authModal = document.getElementById("auth-modal");
@@ -549,6 +653,10 @@ function initAuthUI() {
         });
       }
       closeAuth();
+      if (pendingResultPayload) {
+        revealFullResults();
+        savePendingResult();
+      }
       window.location.href = "dashboard.html";
     } catch (err) {
       const msg = err.message || "Có lỗi xảy ra";

@@ -195,7 +195,7 @@ async function showUserDetail(userId) {
           <p><strong>Điểm rò rỉ:</strong> <span class="score-pill">${r.score}/100</span> — ${escapeHtml(r.level_label)}</p>
           <p><strong>Top rò rỉ:</strong> ${escapeHtml(leaks || "—")}</p>
           ${r.readiness ? `<p><strong>Sẵn sàng thay đổi:</strong> ${escapeHtml(r.readiness)}</p>` : ""}
-          <h4 style="margin:16px 0 8px;font-size:0.9rem">Câu trả lời (${answers.length}/20)</h4>
+          <h4 style="margin:16px 0 8px;font-size:0.9rem">Câu trả lời (${answers.length}/20 — gồm 3 câu chốt)</h4>
           ${answersHtml}
         </div>`;
       })

@@ -1,14 +1,5 @@
-/** 20 câu hỏi (0–19) — đồng bộ bảng chấm điểm */
+/** 17 câu chấm điểm rò rỉ (câu 1–17) */
 const QUESTIONS = [
-  {
-    text: "Bạn đang cảm thấy như thế nào về tình hình tài chính hiện tại của mình?",
-    options: [
-      { label: "Rất tự tin", scores: { cost: 0 } },
-      { label: "Thoải mái", scores: { cost: 2 } },
-      { label: "Mông lung", scores: { cost: 5 } },
-      { label: "Lo lắng", scores: { cost: 9 } },
-    ],
-  },
   {
     text: "Mỗi cuối tháng, bạn có biết tiền đã tiêu vào đâu không?",
     options: [
@@ -162,23 +153,38 @@ const QUESTIONS = [
       { label: "Chịu luôn", scores: { daily: 8, subscription: 5 } },
     ],
   },
+];
+
+/** 3 câu chốt sau khi xem điểm rò rỉ — không tính vào % chính, dùng phân loại hành động */
+const FOLLOWUP_QUESTIONS = [
+  {
+    text: "Bạn đang cảm thấy như thế nào về tình hình tài chính hiện tại của mình?",
+    meta: "emotion",
+    options: [
+      { label: "Rất tự tin", scores: { cost: 9 } },
+      { label: "Thoả mãn", scores: { cost: 6 } },
+      { label: "Mông lung", scores: { cost: 2 } },
+      { label: "Lo lắng", scores: { cost: 0 } },
+    ],
+  },
   {
     text: "Chi phí cuộc sống của bạn trong 3 tháng gần đây đang đi theo chiều hướng nào?",
+    meta: "trend",
     options: [
-      { label: "Tăng dần", scores: { cost: 5 } },
-      { label: "Ổn định không tăng", scores: { cost: 2 } },
-      { label: "Giảm", scores: {} },
+      { label: "Tăng dần", scores: { cost: 8 } },
+      { label: "Ổn định không tăng", scores: { cost: 4 } },
+      { label: "Giảm", scores: { cost: 0 } },
     ],
   },
   {
     text: "Thời điểm này bạn có nghiêm túc với 1 kế hoạch tài chính mới cho bản thân mình không?",
-    meta: "status",
+    meta: "commitment",
     options: [
-      { label: "Có, tôi muốn ngay", scores: { status: 0 }, readiness: "eager" },
-      { label: "Tôi cần cân nhắc trong tương lai", scores: { status: 0 }, readiness: "considering" },
-      { label: "Không, tôi thấy mình ổn rồi", scores: { status: 0 }, readiness: "comfortable" },
+      { label: "Có, tôi muốn ngay", scores: {}, readiness: "eager", commitment: "serious" },
+      { label: "Tôi cần cân nhắc trong tương lai", scores: {}, readiness: "considering", commitment: "light" },
+      { label: "Không, tôi thấy mình ổn rồi", scores: {}, readiness: "comfortable", commitment: "light" },
     ],
   },
 ];
 
-const SCORE_MAX_RAW = 164;
+const SCORE_MAX_RAW = 140;

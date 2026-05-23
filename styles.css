@@ -1115,6 +1115,83 @@ body {
 .result-leaks li strong { color: var(--primary); margin-right: 6px; }
 
 /* Auth gate & modal */
+.results-bridge {
+  text-align: center;
+  font-size: 0.92rem;
+  color: var(--text-muted);
+  margin: 20px 0 8px;
+  line-height: 1.55;
+  padding: 0 8px;
+}
+
+.followup-label {
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--primary);
+  margin-bottom: 8px;
+}
+
+.followup-progress {
+  margin-top: 8px;
+}
+
+.commitment-cta {
+  margin-top: 20px;
+}
+
+.cta-panel {
+  background: linear-gradient(135deg, #f0f7ff 0%, #ecfdf5 100%);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 24px 22px;
+  margin-bottom: 16px;
+}
+
+.cta-panel h3 {
+  font-size: 1.1rem;
+  margin-bottom: 10px;
+  color: var(--text);
+}
+
+.cta-panel p {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  line-height: 1.55;
+  margin-bottom: 14px;
+}
+
+.cta-serious {
+  border-color: var(--primary);
+  box-shadow: 0 4px 20px rgba(37, 99, 235, 0.12);
+}
+
+.cta-light {
+  background: var(--bg-soft);
+}
+
+.cta-checklist {
+  list-style: none;
+  margin: 0 0 18px;
+  padding: 0;
+}
+
+.cta-checklist li {
+  padding: 8px 0 8px 26px;
+  position: relative;
+  font-size: 0.88rem;
+  color: var(--text);
+}
+
+.cta-checklist li::before {
+  content: "→";
+  position: absolute;
+  left: 0;
+  color: var(--primary);
+  font-weight: 700;
+}
+
 .auth-gate {
   background: var(--primary-light);
   border: 1px solid var(--border);
