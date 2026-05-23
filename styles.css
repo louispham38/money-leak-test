@@ -1232,16 +1232,18 @@ body {
   margin-bottom: 24px;
 }
 
-.result-label {
-  display: block;
-  font-size: 0.88rem;
-  color: var(--text-muted);
-  margin-bottom: 8px;
-  font-weight: 600;
+.result-headline {
+  font-size: clamp(1.2rem, 4vw, 1.55rem);
+  font-weight: 800;
+  color: var(--text);
+  line-height: 1.35;
+  margin: 0 0 20px;
+  padding: 0 12px;
+  letter-spacing: -0.02em;
 }
 
 .result-number {
-  font-size: 4.5rem;
+  font-size: clamp(3.5rem, 12vw, 5rem);
   font-weight: 800;
   line-height: 1;
   background: linear-gradient(135deg, var(--primary), var(--accent));

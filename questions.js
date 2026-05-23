@@ -147,8 +147,17 @@ const QUESTIONS = [
   },
 ];
 
-/** 3 câu chốt sau khi xem điểm rò rỉ — không tính vào % chính, dùng phân loại hành động */
+/** 5 câu chốt sau khi xem điểm rò rỉ — không tính vào % chính, dùng phân loại hành động */
 const FOLLOWUP_QUESTIONS = [
+  {
+    text: "Với kết quả bài test trên, bạn cảm nhận thế nào?",
+    meta: "reaction",
+    options: [
+      { label: "Không có gì để nghĩ" },
+      { label: "Hơi bất ngờ" },
+      { label: "Sốc" },
+    ],
+  },
   {
     text: "Bạn đang cảm thấy như thế nào về tình hình tài chính hiện tại của mình?",
     meta: "emotion",
@@ -175,6 +184,15 @@ const FOLLOWUP_QUESTIONS = [
       { label: "Có, tôi muốn ngay", scores: {}, readiness: "eager", commitment: "serious" },
       { label: "Tôi cần cân nhắc trong tương lai", scores: {}, readiness: "considering", commitment: "light" },
       { label: "Không, tôi thấy mình ổn rồi", scores: {}, readiness: "comfortable", commitment: "light" },
+    ],
+  },
+  {
+    text: "Tại thời điểm này, bạn có cơ hội nào để nâng cấp và phát triển tài chính cho bạn chưa?",
+    meta: "opportunity",
+    options: [
+      { label: "Chưa có" },
+      { label: "Có, một vài cơ hội" },
+      { label: "Đã từng có nhưng từ chối" },
     ],
   },
 ];
