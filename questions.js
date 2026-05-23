@@ -1,4 +1,4 @@
-/** 17 câu chấm điểm rò rỉ (câu 1–17) */
+/** 16 câu chấm điểm rò rỉ (câu 1–16) */
 const QUESTIONS = [
   {
     text: "Mỗi cuối tháng, bạn có biết tiền đã tiêu vào đâu không?",
@@ -145,15 +145,6 @@ const QUESTIONS = [
       { label: "Thường thâm hụt cuối tháng", scores: { daily: 5, debt: 3, shopping: 2 } },
     ],
   },
-  {
-    text: "Nếu mất 5 triệu không rõ lý do, bạn sẽ...",
-    options: [
-      { label: "Biết ngay ở đâu", scores: {} },
-      { label: "Tìm ra trong vài ngày", scores: { daily: 2 } },
-      { label: "Khó xác định", scores: { daily: 5, subscription: 3 } },
-      { label: "Chịu luôn", scores: { daily: 8, subscription: 5 } },
-    ],
-  },
 ];
 
 /** 3 câu chốt sau khi xem điểm rò rỉ — không tính vào % chính, dùng phân loại hành động */
@@ -188,4 +179,4 @@ const FOLLOWUP_QUESTIONS = [
   },
 ];
 
-const SCORE_MAX_RAW = 140;
+const SCORE_MAX_RAW = 127;

@@ -16,7 +16,7 @@ const TESTIMONIALS = [
 
 const FAQ = [
   { q: "Bài test này có mất phí không?", a: "<strong>Hoàn toàn miễn phí 100%.</strong> Không cần thẻ tín dụng, không cần tài khoản. Bạn chỉ cần làm bài test và nhận kết quả ngay lập tức — không có bước nào yêu cầu thanh toán.", open: true },
-  { q: "Bài test mất bao lâu?", a: "<strong>Khoảng 5–7 phút.</strong> 17 câu chấm điểm rò rỉ + 3 câu ngắn chốt hành động sau khi xem kết quả. Trả lời theo cảm nhận thực tế của bạn." },
+  { q: "Bài test mất bao lâu?", a: "<strong>Khoảng 5–7 phút.</strong> 16 câu chấm điểm rò rỉ + 3 câu ngắn chốt hành động sau khi xem kết quả. Trả lời theo cảm nhận thực tế của bạn." },
   { q: "Kết quả có chính xác không?", a: "Kết quả chính xác đến mức bạn trả lời thành thật. Bài test được thiết kế dựa trên <strong>các mẫu chi tiêu phổ biến</strong> của người Việt và tâm lý học hành vi tài chính. Trả lời càng thật → insight càng có giá trị." },
   { q: "Tôi có cần đăng ký tài khoản không?", a: "Bạn có thể làm bài test miễn phí ngay. <strong>Đăng ký tài khoản</strong> (email, họ tên, SĐT) để lưu kết quả, xem plan hành động đầy đủ và truy cập khu vực cá nhân." },
   { q: "Sau khi đăng ký tôi sẽ nhận được gì?", a: "Kết quả bài test, plan hành động theo mức rò rỉ, mục tiêu tài chính, giới thiệu app Thu-Chi, nhóm Zalo — và sớm có workshop, coaching 1-1." },
