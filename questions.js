@@ -47,7 +47,7 @@ const QUESTIONS = [
     ],
   },
   {
-    text: "Bạn phản ứng như thế nào với các chương trình Flash sale / Khuyến mãi trên internet?",
+    text: "Bạn phản ứng như thế nào với các chương trình Flash sale / Giảm giá / Khuyến mãi?",
     options: [
       { label: "Bỏ qua", scores: {} },
       { label: "Xem nhưng ít mua", scores: { shopping: 2 } },
