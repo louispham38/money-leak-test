@@ -2,7 +2,7 @@
 (function () {
   const host = window.location.hostname;
   const isLocal = host === "localhost" || host === "127.0.0.1";
-  const PROD_API = "https://money-leak-test-api.onrender.com";
+  const PROD_API = "https://money-leak-test-api.fly.dev";
 
   const PROD_THU_CHI = "https://thu-chi-web.onrender.com";
 

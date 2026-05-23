@@ -1,0 +1,40 @@
+app = "money-leak-test-api"
+primary_region = "sin"
+
+[build]
+
+[env]
+  MLT_DB_PATH = "/data/money_leak.db"
+  MLT_CORS_ORIGINS = "https://louispham38.github.io,http://127.0.0.1:8765,http://localhost:8765"
+  MLT_FRONTEND_URL = "https://louispham38.github.io/money-leak-test"
+  SMTP_PORT = "587"
+
+[[mounts]]
+  source = "money_leak_data"
+  destination = "/data"
+
+[http_service]
+  internal_port = 8080
+  force_https = true
+  auto_stop_machines = "stop"
+  auto_start_machines = true
+  min_machines_running = 0
+  processes = ["app"]
+
+  [http_service.concurrency]
+    type = "connections"
+    hard_limit = 25
+    soft_limit = 20
+
+  [[http_service.checks]]
+    grace_period = "10s"
+    interval = "30s"
+    method = "GET"
+    timeout = "5s"
+    path = "/ping"
+
+[[vm]]
+  size = "shared-cpu-1x"
+  memory = "256mb"
+  cpu_kind = "shared"
+  cpus = 1
