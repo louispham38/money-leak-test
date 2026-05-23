@@ -60,7 +60,7 @@ const QUESTIONS = [
     options: [
       { label: "Không dùng thẻ TD", scores: {} },
       { label: "Trả full mỗi tháng", scores: {} },
-      { label: "Trả một phần", scores: { cost: 5 } },
+      { label: "Trả một phần / Trả góp mỗi tháng", scores: { cost: 5 } },
       { label: "Chỉ trả tối thiểu", scores: { cost: 9 } },
     ],
   },
