@@ -101,7 +101,7 @@ const QUESTIONS = [
     ],
   },
   {
-    text: "Khi bạn bè khoe du lịch / hàng hiệu / quán sang trên mạng xã hội, bạn có cảm thấy áp lực phải chi tương tự?",
+    text: "Khi bạn bè đi du lịch / hàng hiệu / nhà hàng sang trên mạng xã hội, bạn có cảm thấy áp lực phải chi tương tự?",
     options: [
       { label: "Không bao giờ", scores: {} },
       { label: "Đôi khi", scores: { social: 3 } },
